@@ -1,0 +1,30 @@
+[build-system]
+requires = ["scikit-build-core>=0.3.3", "nanobind", "numpy"]
+build-backend = "scikit_build_core.build"
+
+[project]
+version = "0.1.0"
+name = "pyweif"
+description = "Python bindings for libweif"
+authors = [
+    { name = "Matwey V. Kornilov", email = "matwey.kornilov@gmail.com" },
+]
+requires-python = ">=3.7"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Programming Language :: Python :: 3 :: Only",
+]
+license = {text = "GPL-3.0-or-later"}
+dependencies = [
+  "numpy",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "pytest-benchmark",
+]
+
+[tool.scikit-build]
+cmake.verbose = true
