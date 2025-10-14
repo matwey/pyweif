@@ -5,9 +5,12 @@
  *
  */
 
+#include <ranges>
+
 #include <xtensor.hpp>
 #include <nanobind/nanobind.h>
 #include <nanobind/typing.h>
+#include <nanobind/stl/string.h>
 
 #include <weif/spectral_response.h>
 
@@ -23,7 +26,15 @@ void init_spectral_response(nb::module_& m) {
 
 	using spectral_response_type = weif::spectral_response<value_type>;
 	nb::class_<spectral_response_type>(m, "SpectralResponse")
-//		.def(nb::init(&spectral_response_type::make_from_file))
+		.def("__init__", [] (spectral_response_type* s, const std::string& filename) {
+			new (s) spectral_response_type{spectral_response_type::make_from_file(filename)};
+		})
+		.def("__init__", [] (spectral_response_type* s, nb::iterable iter) {
+			const auto filenames = std::ranges::transform_view(iter,
+				[] (nb::handle h) { return nb::cast<std::string>(h); });
+
+			new (s) spectral_response_type{spectral_response_type::stack_from_files(std::cbegin(filenames), std::cend(filenames))};
+		})
 		.def("normalize", &spectral_response_type::normalize)
 		.def("normalized", &spectral_response_type::normalized)
 		.def("stack", &spectral_response_type::stack)
