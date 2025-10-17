@@ -37,6 +37,7 @@ class TestWeightFunction:
 			assert wf(0) == 0
 
 class TestWeightFunction2d:
+	@pytest.mark.long
 	@pytest.mark.benchmark(group="pyweif.WeightFunction2d", min_rounds=10, disable_gc=True, warmup=False)
 	@pytest.mark.parametrize("size", [128, 1024, 4096])
 	def test_mono_point(self, size, benchmark):

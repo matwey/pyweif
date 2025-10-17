@@ -37,3 +37,11 @@ env_list = ["3.14", "3.13", "3.12", "3.11", "3.10", "3.9"]
 description = "Run test under {base_python}"
 extras = ["dev"]
 commands = [["python", "-m", "pytest"]]
+
+[tool.pytest.ini_options]
+markers = [
+    "long: marks tests as long running (deselect with '-m \"not long\"')",
+]
+addopts = [
+    "-m", "not long"
+]
