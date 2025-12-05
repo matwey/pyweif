@@ -1,5 +1,5 @@
 [build-system]
-requires = ["scikit-build-core>=0.3.3", "nanobind", "numpy"]
+requires = ["scikit-build-core>=0.3.3", "nanobind<2.10", "numpy"]
 build-backend = "scikit_build_core.build"
 
 [project]
@@ -37,6 +37,7 @@ env_list = ["3.14", "3.13", "3.12", "3.11", "3.10", "3.9"]
 description = "Run test under {base_python}"
 extras = ["dev"]
 commands = [["python", "-m", "pytest"]]
+passenv = ["CMAKE_TOOLCHAIN_FILE"]
 
 [tool.pytest.ini_options]
 markers = [
