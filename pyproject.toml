@@ -27,6 +27,7 @@ dev = [
 
 [tool.scikit-build]
 build.verbose = true
+wheel.py-api = "cp312"
 
 [tool.tox]
 requires = ["tox>=4.19"]
@@ -51,5 +52,7 @@ before-all = "pipx install ninja && yum -y install curl zip unzip tar && git clo
 environment = { CMAKE_TOOLCHAIN_FILE = "/opt/vcpkg/scripts/buildsystems/vcpkg.cmake", VCPKG_FORCE_SYSTEM_BINARIES = "1" }
 build-verbosity = 1
 config-settings = { "logging.level" = "INFO" }
+test-extras = ["dev"]
+test-command = "pytest {project}/tests"
 archs = ["x86_64"]
 skip = "*musllinux*"
