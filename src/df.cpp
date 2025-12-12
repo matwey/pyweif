@@ -5,7 +5,6 @@
  *
  */
 
-#include <xtensor.hpp>
 #include <nanobind/nanobind.h>
 
 #include <weif/digital_filter_2d.h>

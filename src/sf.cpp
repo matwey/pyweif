@@ -5,7 +5,6 @@
  *
  */
 
-#include <xtensor.hpp>
 #include <nanobind/nanobind.h>
 
 #include <weif/spectral_response.h>

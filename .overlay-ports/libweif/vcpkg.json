@@ -1,0 +1,19 @@
+{
+  "name": "libweif",
+  "version-string": "0.2.0",
+  "description": "Optical turbulence weighting function package",
+  "homepage": "https://github.com/matwey/libweif",
+  "dependencies": [
+    "boost-math",
+    "fftw3",
+    "rapidcsv",
+    {
+      "name": "xtensor",
+      "version>=": "0.26.0"
+    },
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    }
+  ]
+}
