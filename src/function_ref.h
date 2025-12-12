@@ -25,7 +25,7 @@ template <typename Return, typename... Args>
 struct type_caster<function_ref<Return(Args...)>> {
 	using ReturnCaster = make_caster<std::conditional_t<std::is_void_v<Return>, void_type, Return>>;
 	using Value = function_ref<Return(Args...)>;
-	static constexpr auto Name = const_name(NB_TYPING_CALLABLE "[[") + concat(make_caster<Args>::Name...) + const_name("], ") + ReturnCaster::Name + const_name("]");
+	static constexpr auto Name = const_name("collections.abc.Callable[[") + concat(make_caster<Args>::Name...) + const_name("], ") + ReturnCaster::Name + const_name("]");
 
 	template <typename T> using Cast = movable_cast_t<T>;
 	template <typename T> static constexpr bool can_cast() { return true; }
