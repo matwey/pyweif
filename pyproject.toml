@@ -1,5 +1,5 @@
 [build-system]
-requires = ["scikit-build-core>=0.3.3", "nanobind", "numpy"]
+requires = ["scikit-build-core>=0.3.3", "nanobind"]
 build-backend = "scikit_build_core.build"
 
 [project]
@@ -9,25 +9,24 @@ description = "Python bindings for libweif"
 authors = [
     { name = "Matwey V. Kornilov", email = "matwey.kornilov@gmail.com" },
 ]
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 classifiers = [
     "Development Status :: 4 - Beta",
     "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     "Programming Language :: Python :: 3 :: Only",
 ]
 license = {text = "GPL-3.0-or-later"}
-dependencies = [
-  "numpy",
-]
+dependencies = []
 
 [project.optional-dependencies]
 dev = [
+  "numpy",
   "pytest",
   "pytest-benchmark",
 ]
 
 [tool.scikit-build]
-cmake.verbose = true
+build.verbose = true
 
 [tool.tox]
 requires = ["tox>=4.19"]
@@ -46,3 +45,11 @@ markers = [
 addopts = [
     "-m", "not long"
 ]
+
+[tool.cibuildwheel]
+before-all = "pipx install ninja && yum -y install curl zip unzip tar && git clone --depth 1 https://github.com/microsoft/vcpkg /opt/vcpkg && /opt/vcpkg/bootstrap-vcpkg.sh -disableMetrics"
+environment = { CMAKE_TOOLCHAIN_FILE = "/opt/vcpkg/scripts/buildsystems/vcpkg.cmake", VCPKG_FORCE_SYSTEM_BINARIES = "1" }
+build-verbosity = 1
+config-settings = { "logging.level" = "INFO" }
+archs = ["x86_64"]
+skip = "*musllinux*"
