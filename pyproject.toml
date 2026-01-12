@@ -3,7 +3,7 @@ requires = ["scikit-build-core>=0.3.3", "nanobind"]
 build-backend = "scikit_build_core.build"
 
 [project]
-version = "0.2.0-rc1"
+version = "0.2.0-rc2"
 name = "pyweif"
 description = "Python bindings for libweif"
 authors = [
