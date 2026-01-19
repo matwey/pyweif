@@ -25,6 +25,12 @@ dev = [
   "pytest-benchmark",
 ]
 
+doc = [
+  "nanobind",
+  "sphinx",
+  "sphinx-autoapi",
+]
+
 [tool.scikit-build]
 build.verbose = true
 wheel.py-api = "cp312"
