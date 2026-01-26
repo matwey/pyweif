@@ -6,6 +6,8 @@
  */
 
 #include <nanobind/nanobind.h>
+#include <nanobind/stl/array.h>
+#include <nanobind/stl/function.h>
 
 #include <weif/digital_filter_2d.h>
 
