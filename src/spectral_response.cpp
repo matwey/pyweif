@@ -38,6 +38,5 @@ void init_spectral_response(nb::module_& m) {
 		.def("normalized", &spectral_response_type::normalized)
 		.def("stack", &spectral_response_type::stack)
 		.def("stacked", &spectral_response_type::stacked)
-		.def("effective_lambda", &spectral_response_type::effective_lambda)
-		.def("data", &spectral_response_type::data);
+		.def("effective_lambda", &spectral_response_type::effective_lambda);
 }
