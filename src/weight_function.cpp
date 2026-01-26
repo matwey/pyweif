@@ -43,13 +43,15 @@ void init_weight_function(nb::module_& m) {
 
 	using weight_function_type = weif::weight_function<value_type>;
 	nb::class_<weight_function_type>(m, "WeightFunction")
-		.def(nb::init<py_sf<value_type>, value_type, py_af<value_type>, value_type, std::size_t>())
-		.def("__call__", get_call<value_type, weight_function_type(value_type)>());
+		.def(nb::init<py_sf<value_type>, value_type, py_af<value_type>, value_type, std::size_t>(),
+			nb::arg("spectral_filter"), nb::arg("wavelength"), nb::arg("aperture_filter"), nb::arg("aperture_scale"), nb::arg("size"))
+		.def("__call__", get_call<value_type, weight_function_type(value_type)>(), nb::arg("altitude"));
 
 	using weight_function_2d_type = weif::weight_function_2d<value_type>;
 	nb::class_<weight_function_2d_type>(m, "WeightFunction2d")
-		.def(nb::init<py_sf<value_type>, value_type, py_af_2d<value_type>, value_type, std::size_t>())
-		.def("__call__", get_call<value_type, weight_function_2d_type(value_type)>());
+		.def(nb::init<py_sf<value_type>, value_type, py_af_2d<value_type>, value_type, std::size_t>(),
+			nb::arg("spectral_filter"), nb::arg("wavelength"), nb::arg("aperture_filter"), nb::arg("aperture_scale"), nb::arg("size"))
+		.def("__call__", get_call<value_type, weight_function_2d_type(value_type)>(), nb::arg("altitude"));
 
 #if 0
 	using weight_function_grid_2d_type = weif::weight_function_grid_2d<value_type>;

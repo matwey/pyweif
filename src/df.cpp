@@ -6,6 +6,8 @@
  */
 
 #include <nanobind/nanobind.h>
+#include <nanobind/stl/array.h>
+#include <nanobind/stl/function.h>
 
 #include <weif/digital_filter_2d.h>
 
@@ -40,9 +42,9 @@ void init_df(nb::module_& m) {
 
 	using digital_filter_2d_type = weif::digital_filter_2d<value_type>;
 	nb::class_<digital_filter_2d_type>(m, "DigitalFilter2d")
-		.def(nb::init<std::function<value_type(value_type, value_type)>, digital_filter_2d_type::shape_type>())
+		.def(nb::init<std::function<value_type(value_type, value_type)>, digital_filter_2d_type::shape_type>(), nb::arg("fun"), nb::arg("shape"))
 		.def("mix", &digital_filter_2d_type::mix)
 		.def("mixed", &digital_filter_2d_type::mixed)
-		.def("__call__", get_call<value_type, digital_filter_2d_type(value_type, value_type)>());
+		.def("__call__", get_call<value_type, digital_filter_2d_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"));
 }
 

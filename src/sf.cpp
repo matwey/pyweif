@@ -55,22 +55,22 @@ void init_sf(nb::module_& m) {
 	using mono_type = sf::mono<value_type>;
 	nb::class_<mono_type>(m, "Mono")
 		.def(nb::init<>())
-		.def("__call__", get_call<value_type, mono_type(value_type)>())
-		.def("regular", get_regular<value_type, mono_type(value_type)>());
+		.def("__call__", get_call<value_type, mono_type(value_type)>(), nb::arg("x"))
+		.def("regular", get_regular<value_type, mono_type(value_type)>(), nb::arg("x"));
 
 	using gauss_type = sf::gauss<value_type>;
 	nb::class_<gauss_type>(m, "Gauss")
-		.def(nb::init<value_type>())
-		.def("__call__", get_call<value_type, gauss_type(value_type)>())
-		.def("regular", get_regular<value_type, gauss_type(value_type)>());
+		.def(nb::init<value_type>(), nb::arg("fwhm"))
+		.def("__call__", get_call<value_type, gauss_type(value_type)>(), nb::arg("x"))
+		.def("regular", get_regular<value_type, gauss_type(value_type)>(), nb::arg("x"));
 
 	using spectral_response_type = weif::spectral_response<value_type>;
 	using poly_type = sf::poly<value_type>;
 	nb::class_<poly_type>(m, "Poly")
-		.def(nb::init<const spectral_response_type&, std::size_t>())
-		.def(nb::init<const spectral_response_type&, std::size_t, value_type>())
-		.def("__call__", get_call<value_type, poly_type(value_type)>())
-		.def("regular", get_regular<value_type, poly_type(value_type)>())
+		.def(nb::init<const spectral_response_type&, std::size_t>(), nb::arg("response"), nb::arg("size"))
+		.def(nb::init<const spectral_response_type&, std::size_t, value_type>(), nb::arg("response"), nb::arg("size"), nb::arg("carrier"))
+		.def("__call__", get_call<value_type, poly_type(value_type)>(), nb::arg("x"))
+		.def("regular", get_regular<value_type, poly_type(value_type)>(), nb::arg("x"))
 		.def("normalize", &poly_type::normalize)
 		.def("normalized", &poly_type::normalized)
 		.def("equiv_lambda", &poly_type::equiv_lambda)

@@ -42,29 +42,29 @@ void init_af(nb::module_& m) {
 	using circular_type = af::circular<value_type>;
 	nb::class_<circular_type>(m, "Circular")
 		.def(nb::init<>())
-		.def("__call__", get_call<value_type, circular_type(value_type)>())
-		.def("__call__", get_call<value_type, circular_type(value_type, value_type)>());
+		.def("__call__", get_call<value_type, circular_type(value_type)>(), nb::arg("u"))
+		.def("__call__", get_call<value_type, circular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"));
 
 	using annular_type = af::annular<value_type>;
 	nb::class_<af::annular<value_type>>(m, "Annular")
-		.def(nb::init<value_type>())
-		.def("__call__", get_call<value_type, annular_type(value_type)>())
-		.def("__call__", get_call<value_type, annular_type(value_type, value_type)>());
+		.def(nb::init<value_type>(), nb::arg("obscuration"))
+		.def("__call__", get_call<value_type, annular_type(value_type)>(), nb::arg("u"))
+		.def("__call__", get_call<value_type, annular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"));
 
 	using cross_annular_type = af::cross_annular<value_type>;
 	nb::class_<af::cross_annular<value_type>>(m, "CrossAnnular")
-		.def(nb::init<value_type, value_type, value_type>())
-		.def("__call__", get_call<value_type, cross_annular_type(value_type)>())
-		.def("__call__", get_call<value_type, cross_annular_type(value_type, value_type)>());
+		.def(nb::init<value_type, value_type, value_type>(), nb::arg("ratio"), nb::arg("obscuration_first"), nb::arg("obscuration_second"))
+		.def("__call__", get_call<value_type, cross_annular_type(value_type)>(), nb::arg("u"))
+		.def("__call__", get_call<value_type, cross_annular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"));
 
 	using point_type = af::point<value_type>;
 	nb::class_<point_type>(m, "Point")
 		.def(nb::init<>())
-		.def("__call__", get_call<value_type, point_type(value_type)>())
-		.def("__call__", get_call<value_type, point_type(value_type, value_type)>());
+		.def("__call__", get_call<value_type, point_type(value_type)>(), nb::arg("u"))
+		.def("__call__", get_call<value_type, point_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"));
 
 	using square_type = af::square<value_type>;
 	nb::class_<square_type>(m, "Square")
 		.def(nb::init<>())
-		.def("__call__", get_call<value_type, square_type(value_type, value_type)>());
+		.def("__call__", get_call<value_type, square_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"));
 }
