@@ -28,7 +28,7 @@ void init_spectral_response(nb::module_& m) {
 		.def("__init__", [] (spectral_response_type* s, const std::string& filename) {
 			new (s) spectral_response_type{spectral_response_type::make_from_file(filename)};
 		}, nb::arg("filename"))
-		.def("__init__", [] (spectral_response_type* s, nb::iterable iter) {
+		.def("__init__", [] (spectral_response_type* s, nb::typed<nb::iterable, std::string> iter) {
 			const auto filenames = std::ranges::transform_view(iter,
 				[] (nb::handle h) { return nb::cast<std::string>(h); });
 
