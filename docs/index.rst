@@ -2,12 +2,15 @@ Welcome to pyweif's documentation!
 ==================================
 
 .. toctree::
-   :maxdepth: 2
+   :hidden:
+   :maxdepth: 3
    :caption: Contents:
 
-Indices and tables
-==================
+Welcome to the documentation for the pyweif library — a Python library for calculating weight functions for optical turbulence in the atmosphere.
+The library is a wrapper arong :external+libweif:doc:`libweif C++ library <index>`.
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+The present documentation is arranged in the following sections:
+ - :ref:`Tutorial <tutorial>` — Practical examples demonstrating how to use the library
+ - :ref:`How-to guides <howto>` — Building and installation guides
+ - :doc:`API Reference <autoapi/index>`
+ - :ref:`Internals <internals>` — library internals and explanations

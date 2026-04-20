@@ -17,6 +17,7 @@ extensions = [
     'autoapi.extension',
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
+    'sphinx.ext.intersphinx',
 ]
 
 templates_path = ['_templates']
@@ -29,3 +30,9 @@ autoapi_dirs = ['../src/pyweif']
 
 html_theme = 'alabaster'
 html_static_path = ['_static']
+
+intersphinx_mapping = {
+    'libweif': ('https://libweif.readthedocs.io/en/latest/', None),
+}
+
+intersphinx_disabled_reftypes = ["*"]
