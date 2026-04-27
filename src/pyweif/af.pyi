@@ -1,3 +1,5 @@
+"""Aperture filter submodule"""
+
 from typing import overload
 
 

@@ -20,13 +20,14 @@ dependencies = []
 
 [project.optional-dependencies]
 dev = [
+  "nanobind",
   "numpy",
   "pytest",
   "pytest-benchmark",
+  "tox",
 ]
 
 doc = [
-  "nanobind",
   "sphinx",
   "sphinx-autoapi",
 ]
@@ -44,6 +45,16 @@ description = "Run test under {base_python}"
 extras = ["dev"]
 commands = [["python", "-m", "pytest"]]
 passenv = ["CMAKE_TOOLCHAIN_FILE"]
+
+[tool.tox.env.stubgen]
+description = "Check that stubgen does not modify any .pyi files"
+extras = ["dev"]
+commands = [
+    ["python", "-m", "nanobind.stubgen", "-m", "pyweif", "-r", "-O", "src", "-M", "src/pyweif/py.typed"],
+    ["git", "diff", "--quiet", "--exit-code"]
+]
+passenv = ["CMAKE_TOOLCHAIN_FILE"]
+allowlist_externals = ["git"]
 
 [tool.pytest.ini_options]
 markers = [

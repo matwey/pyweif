@@ -1,3 +1,5 @@
+"""Digital filter submodule"""
+
 from collections.abc import Callable, Sequence
 
 
