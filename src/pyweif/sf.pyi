@@ -1,3 +1,5 @@
+"""Spectral filter submodule"""
+
 from typing import overload
 
 import pyweif
