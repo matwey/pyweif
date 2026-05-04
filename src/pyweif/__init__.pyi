@@ -5,21 +5,177 @@ from . import af as af, df as df, sf as sf
 
 
 class SpectralResponse:
-    @overload
-    def __init__(self, filename: str) -> None: ...
+    """
+    Spectral response curve.
+
+    Represents a spectral response curve on a uniform wavelength grid,
+    providing operations for normalization, stacking, and analysis.
+    The spectral response is typically used as input for polychromatic
+    filter calculations.
+
+    See Also
+    --------
+    :external+libweif:cpp:class:`weif::spectral_response` : Base class in C++ library.
+    :external+libweif:cpp:class:`weif::sf::poly` : Polychromatic spectral filter.
+    """
 
     @overload
-    def __init__(self, iter: Iterable[str]) -> None: ...
+    def __init__(self, filename: str) -> None:
+        """
+        Construct spectral response from a file.
 
-    def normalize(self) -> SpectralResponse: ...
+        Loads wavelength and response values from a space‑separated text file.
 
-    def normalized(self) -> SpectralResponse: ...
+        Parameters
+        ----------
+        filename : str
+            Path to the data file.
 
-    def stack(self, other: SpectralResponse) -> None: ...
+        File Format Requirements
+        -----------------------
+        - Space‑separated values (no multiple spaces are allowed as delimiter)
+        - No header row
+        - First column: Wavelength values (in nanometers, increasing order)
+        - Second column: Corresponding spectral response values
 
-    def stacked(self, other: SpectralResponse) -> SpectralResponse: ...
+        Example valid file content::
 
-    def effective_lambda(self) -> float: ...
+            400.0 0.15
+            410.0 0.25
+            ...
+            700.0 0.05
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::spectral_response::make_from_file` : Base function in C++ library.
+        """
+
+    @overload
+    def __init__(self, iter: Iterable[str]) -> None:
+        """
+        Construct spectral response by stacking multiple files.
+
+        Creates a spectral response by loading and stacking (multiplying)
+        several response curves from a sequence of filenames.
+
+        Parameters
+        ----------
+        iter : Iterable[str]
+            Iterable of file paths. Each file must satisfy the format
+            described in the single‑file constructor.
+
+        The stacking is performed sequentially: the first file defines the
+        initial response, and each subsequent file is multiplied (stacked)
+        with the accumulated result.
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::spectral_response::stack_from_files` : Base function in C++ library.
+        """
+
+    def normalize(self) -> SpectralResponse:
+        r"""
+        Normalizes the spectral response in‑place.
+
+        Scales the data so that the total response equals 1:
+
+        .. math::
+
+             \sum_i F(\lambda_i) = 1.
+
+        Returns
+        -------
+        SpectralResponse
+            Reference to the modified object (enables method chaining).
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::spectral_response::normalize` : Base method in C++ library.
+        """
+
+    def normalized(self) -> SpectralResponse:
+        """
+        Creates a normalized copy of the response.
+
+        Returns a new spectral response instance that is normalized
+        (see :meth:`normalize`). The original object remains unchanged.
+
+        Returns
+        -------
+        SpectralResponse
+            New normalized spectral response.
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::spectral_response::normalized` : Base method in C++ library.
+        """
+
+    def stack(self, other: SpectralResponse) -> None:
+        """
+        Performs in‑place spectral response stacking (multiplication).
+
+        Multiplies the current response with another spectral response,
+        keeping only the wavelength range common to both curves.
+
+        Parameters
+        ----------
+        other : SpectralResponse
+            Another spectral response to stack with current.
+
+        Both spectral responses must have compatible wavelength grids:
+        sufficient overlapping wavelength range and identical spacing.
+
+        Raises
+        ------
+        RuntimeError
+            If the grids have no overlapping wavelength range.
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::spectral_response::stack` : Base method in C++ library.
+        """
+
+    def stacked(self, other: SpectralResponse) -> SpectralResponse:
+        """
+        Creates a stacked response (element‑wise multiplication).
+
+        Returns a new spectral response that is the result of stacking
+        the current response with another one (see :meth:`stack`).
+
+        Parameters
+        ----------
+        other : SpectralResponse
+            Response to stack with current.
+
+        Returns
+        -------
+        SpectralResponse
+            New stacked spectral response.
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::spectral_response::stacked` : Base method in C++ library.
+        """
+
+    def effective_lambda(self) -> float:
+        r"""
+        Computes the effective wavelength.
+
+        Uses the usual astronomical definition of the effective wavelength:
+
+        .. math::
+
+             \lambda_{\mathrm{eff}} = \frac{\int \lambda R(\lambda) d\lambda}{\int R(\lambda) d\lambda}.
+
+        Returns
+        -------
+        float
+            Effective wavelength in nanometers.
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::spectral_response::effective_lambda` : Base function in C++ library.
+        """
 
 class WeightFunction:
     r"""
