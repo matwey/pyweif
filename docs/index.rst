@@ -6,6 +6,9 @@ Welcome to pyweif's documentation!
    :maxdepth: 3
    :caption: Contents:
 
+   howto
+   autoapi/index
+
 Welcome to the documentation for the pyweif library — a Python library for calculating weight functions for optical turbulence in the atmosphere.
 The library is a wrapper around :external+libweif:doc:`libweif C++ library <index>`.
 
