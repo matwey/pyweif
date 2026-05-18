@@ -2,6 +2,9 @@
 
 from typing import overload
 
+import numpy
+from numpy.typing import NDArray
+
 
 class Circular:
     """
@@ -27,7 +30,19 @@ class Circular:
         """Constructs an circular aperture filter."""
 
     @overload
-    def __call__(self, u: float) -> float:
+    def __call__(self, u: float) -> float: ...
+
+    @overload
+    def __call__(self, ux: float, uy: float) -> float: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Call operator for circular aperture filter in radial coordinates.
 
@@ -53,7 +68,13 @@ class Circular:
         """
 
     @overload
-    def __call__(self, ux: float, uy: float) -> float:
+    def __call__(self, ux: NDArray[numpy.float32], uy: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float64], uy: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float128], uy: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Call operator for circular aperture filter in Cartesian coordinates.
 
@@ -112,7 +133,19 @@ class Annular:
         """
 
     @overload
-    def __call__(self, u: float) -> float:
+    def __call__(self, u: float) -> float: ...
+
+    @overload
+    def __call__(self, ux: float, uy: float) -> float: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Call operator for annular aperture filter in radial coordinates.
 
@@ -138,7 +171,13 @@ class Annular:
         """
 
     @overload
-    def __call__(self, ux: float, uy: float) -> float:
+    def __call__(self, ux: NDArray[numpy.float32], uy: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float64], uy: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float128], uy: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Call operator for annular aperture filter in Cartesian coordinates.
 
@@ -204,7 +243,19 @@ class CrossAnnular:
         """
 
     @overload
-    def __call__(self, u: float) -> float:
+    def __call__(self, u: float) -> float: ...
+
+    @overload
+    def __call__(self, ux: float, uy: float) -> float: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Call operator for the aperture filter in radial coordinates.
 
@@ -226,7 +277,13 @@ class CrossAnnular:
         """
 
     @overload
-    def __call__(self, ux: float, uy: float) -> float:
+    def __call__(self, ux: NDArray[numpy.float32], uy: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float64], uy: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float128], uy: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Call operator for the aperture filter in Cartesian coordinates.
 
@@ -274,7 +331,19 @@ class Point:
         """Constructs a point aperture filter."""
 
     @overload
-    def __call__(self, u: float) -> float:
+    def __call__(self, u: float) -> float: ...
+
+    @overload
+    def __call__(self, ux: float, uy: float) -> float: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Call operator for point aperture filter in radial coordinates.
 
@@ -300,7 +369,13 @@ class Point:
         """
 
     @overload
-    def __call__(self, ux: float, uy: float) -> float:
+    def __call__(self, ux: NDArray[numpy.float32], uy: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float64], uy: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float128], uy: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Call operator for point aperture filter in Cartesian coordinates.
 
@@ -347,6 +422,7 @@ class Square:
     def __init__(self) -> None:
         """Constructs a square aperture filter."""
 
+    @overload
     def __call__(self, ux: float, uy: float) -> float:
         """
         Call operator for square aperture filter in Cartesian coordinates.
@@ -373,3 +449,12 @@ class Square:
         --------
         :external+libweif:cpp:func:`weif::af::square::operator()` : Base function in C++ library.
         """
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float32], uy: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float64], uy: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float128], uy: NDArray[numpy.float128]) -> NDArray[numpy.float128]: ...
