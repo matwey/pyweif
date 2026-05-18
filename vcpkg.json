@@ -1,6 +1,10 @@
 {
   "dependencies": [
     "boost-compat",
-    "libweif"
+    "libweif",
+    {
+      "name": "xtensor",
+      "version>=": "0.26.0"
+    }
   ]
 }
