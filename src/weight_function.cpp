@@ -162,7 +162,7 @@ template<class T, class... Args> struct get_call_helper<T(Args...)> {
 	};
 };
 
-template<class, class F>
+template<class F>
 constexpr auto get_call() noexcept {
 	return get_call_helper<F>::get_call();
 }
@@ -179,14 +179,14 @@ void init_weight_function(nb::module_& m) {
 		.def(nb::init<py_sf<value_type>, value_type, py_af<value_type>, value_type, std::size_t>(),
 			nb::arg("spectral_filter"), nb::arg("wavelength"), nb::arg("aperture_filter"), nb::arg("aperture_scale"), nb::arg("size"),
 			weight_function_init_doc)
-		.def("__call__", get_call<value_type, weight_function_type(value_type)>(), nb::arg("altitude"), weight_function_call_doc);
+		.def("__call__", get_call<weight_function_type(value_type)>(), nb::arg("altitude"), weight_function_call_doc);
 
 	using weight_function_2d_type = weif::weight_function_2d<value_type>;
 	nb::class_<weight_function_2d_type>(m, "WeightFunction2d", weight_function_2d_doc)
 		.def(nb::init<py_sf<value_type>, value_type, py_af_2d<value_type>, value_type, std::size_t>(),
 			nb::arg("spectral_filter"), nb::arg("wavelength"), nb::arg("aperture_filter"), nb::arg("aperture_scale"), nb::arg("size"),
 			weight_function_2d_init_doc)
-		.def("__call__", get_call<value_type, weight_function_2d_type(value_type)>(), nb::arg("altitude"), weight_function_2d_call_doc);
+		.def("__call__", get_call<weight_function_2d_type(value_type)>(), nb::arg("altitude"), weight_function_2d_call_doc);
 
 #if 0
 	using weight_function_grid_2d_type = weif::weight_function_grid_2d<value_type>;
