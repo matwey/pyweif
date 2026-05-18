@@ -114,7 +114,7 @@ template<class T, class... Args> struct get_call_helper<T(Args...)> {
 	};
 };
 
-template<class, class F>
+template<class F>
 constexpr auto get_call() noexcept {
 	return get_call_helper<F>::get_call();
 }
@@ -135,6 +135,6 @@ void init_df(nb::module_& m) {
 		.def(nb::init<std::function<value_type(value_type, value_type)>, digital_filter_2d_type::shape_type>(), nb::arg("fun"), nb::arg("shape"), digital_filter_2d_init_doc)
 		.def("mix", &digital_filter_2d_type::mix, digital_filter_2d_mix_doc)
 		.def("mixed", &digital_filter_2d_type::mixed, digital_filter_2d_mixed_doc)
-		.def("__call__", get_call<value_type, digital_filter_2d_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc);
+		.def("__call__", get_call<digital_filter_2d_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc);
 }
 
