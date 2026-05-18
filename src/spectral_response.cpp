@@ -10,6 +10,8 @@
 #include <nanobind/nanobind.h>
 #include <nanobind/typing.h>
 #include <nanobind/stl/string.h>
+#include <nanobind/xtensor.h>
+
 
 #include <weif/spectral_response.h>
 
@@ -180,6 +182,21 @@ See Also
 :external+libweif:cpp:func:`weif::spectral_response::effective_lambda` : Base function in C++ library.
 )";
 
+constexpr const char* spectral_response_data_doc = R"(
+Returns the spectral response curve data.
+
+The data is a 1‑D array of response values corresponding to the wavelength grid.
+
+Returns
+-------
+ndarray
+    One‑dimensional array of response values (same length as the wavelength grid).
+
+See Also
+--------
+:external+libweif:cpp:func:`weif::spectral_response::data` : Base method in C++ library.
+)";
+
 
 void init_spectral_response(nb::module_& m) {
 	/* Python floating point number is the double. So, let value_type = double.
@@ -202,5 +219,6 @@ void init_spectral_response(nb::module_& m) {
 		.def("normalized", &spectral_response_type::normalized, spectral_response_normalized_doc)
 		.def("stack", &spectral_response_type::stack, nb::arg("other"), spectral_response_stack_doc)
 		.def("stacked", &spectral_response_type::stacked, nb::arg("other"), spectral_response_stacked_doc)
-		.def("effective_lambda", &spectral_response_type::effective_lambda, spectral_response_effective_lambda_doc);
+		.def("effective_lambda", &spectral_response_type::effective_lambda, spectral_response_effective_lambda_doc)
+		.def("data", &spectral_response_type::data, spectral_response_data_doc);
 }
