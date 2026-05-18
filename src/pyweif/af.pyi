@@ -2,6 +2,9 @@
 
 from typing import overload
 
+import numpy
+from numpy.typing import NDArray
+
 
 class Circular:
     r"""
@@ -54,6 +57,168 @@ class Circular:
 
     @overload
     def __call__(self, ux: float, uy: float) -> float:
+        r"""
+        Call operator for circular aperture filter in Cartesian coordinates.
+
+        Evaluates the filter by converting to radial coordinates:
+
+        .. math::
+
+             A(u_x, u_y) = A\left(\sqrt{u_x^2 + u_y^2}\right).
+
+        Parameters
+        ----------
+        ux : float
+            Dimensionless spatial frequency component in x-direction.
+        uy : float
+            Dimensionless spatial frequency component in y-direction.
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency coordinates
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::circular::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float32]) -> NDArray[numpy.float32]:
+        r"""
+        Call operator for circular aperture filter in radial coordinates.
+
+        Parameters
+        ----------
+        u : float
+            Dimensionless spatial frequency magnitude (radial coordinate)
+
+        Evaluates the squared jinc function for given radial frequency:
+
+        .. math::
+
+             A(u) = \mathrm{jinc}_1^2(\pi u).
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::circular::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float64]) -> NDArray[numpy.float64]:
+        r"""
+        Call operator for circular aperture filter in radial coordinates.
+
+        Parameters
+        ----------
+        u : float
+            Dimensionless spatial frequency magnitude (radial coordinate)
+
+        Evaluates the squared jinc function for given radial frequency:
+
+        .. math::
+
+             A(u) = \mathrm{jinc}_1^2(\pi u).
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::circular::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
+        r"""
+        Call operator for circular aperture filter in radial coordinates.
+
+        Parameters
+        ----------
+        u : float
+            Dimensionless spatial frequency magnitude (radial coordinate)
+
+        Evaluates the squared jinc function for given radial frequency:
+
+        .. math::
+
+             A(u) = \mathrm{jinc}_1^2(\pi u).
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::circular::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float32], uy: NDArray[numpy.float32]) -> NDArray[numpy.float32]:
+        r"""
+        Call operator for circular aperture filter in Cartesian coordinates.
+
+        Evaluates the filter by converting to radial coordinates:
+
+        .. math::
+
+             A(u_x, u_y) = A\left(\sqrt{u_x^2 + u_y^2}\right).
+
+        Parameters
+        ----------
+        ux : float
+            Dimensionless spatial frequency component in x-direction.
+        uy : float
+            Dimensionless spatial frequency component in y-direction.
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency coordinates
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::circular::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float64], uy: NDArray[numpy.float64]) -> NDArray[numpy.float64]:
+        r"""
+        Call operator for circular aperture filter in Cartesian coordinates.
+
+        Evaluates the filter by converting to radial coordinates:
+
+        .. math::
+
+             A(u_x, u_y) = A\left(\sqrt{u_x^2 + u_y^2}\right).
+
+        Parameters
+        ----------
+        ux : float
+            Dimensionless spatial frequency component in x-direction.
+        uy : float
+            Dimensionless spatial frequency component in y-direction.
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency coordinates
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::circular::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float128], uy: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         r"""
         Call operator for circular aperture filter in Cartesian coordinates.
 
@@ -139,6 +304,168 @@ class Annular:
 
     @overload
     def __call__(self, ux: float, uy: float) -> float:
+        r"""
+        Call operator for annular aperture filter in Cartesian coordinates.
+
+        Evaluates the filter by converting to radial coordinates:
+
+        .. math::
+
+             A(u_x, u_y) = A\left(\sqrt{u_x^2 + u_y^2}\right).
+
+        Parameters
+        ----------
+        ux : float
+            Dimensionless spatial frequency component in x-direction.
+        uy : float
+            Dimensionless spatial frequency component in y-direction.
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency coordinates
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::annular::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float32]) -> NDArray[numpy.float32]:
+        r"""
+        Call operator for annular aperture filter in radial coordinates.
+
+        Evaluates the squared normalized difference of jinc functions:
+
+        .. math::
+
+             A(u) = \frac{\left(\mathrm{jinc}_1(\pi u) - \epsilon^2 \mathrm{jinc}_1(\pi \epsilon u)\right)^2}{(1 - \epsilon^2)^2}.
+
+        Parameters
+        ----------
+        u : float
+            Dimensionless spatial frequency magnitude (radial coordinate)
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::annular::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float64]) -> NDArray[numpy.float64]:
+        r"""
+        Call operator for annular aperture filter in radial coordinates.
+
+        Evaluates the squared normalized difference of jinc functions:
+
+        .. math::
+
+             A(u) = \frac{\left(\mathrm{jinc}_1(\pi u) - \epsilon^2 \mathrm{jinc}_1(\pi \epsilon u)\right)^2}{(1 - \epsilon^2)^2}.
+
+        Parameters
+        ----------
+        u : float
+            Dimensionless spatial frequency magnitude (radial coordinate)
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::annular::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
+        r"""
+        Call operator for annular aperture filter in radial coordinates.
+
+        Evaluates the squared normalized difference of jinc functions:
+
+        .. math::
+
+             A(u) = \frac{\left(\mathrm{jinc}_1(\pi u) - \epsilon^2 \mathrm{jinc}_1(\pi \epsilon u)\right)^2}{(1 - \epsilon^2)^2}.
+
+        Parameters
+        ----------
+        u : float
+            Dimensionless spatial frequency magnitude (radial coordinate)
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::annular::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float32], uy: NDArray[numpy.float32]) -> NDArray[numpy.float32]:
+        r"""
+        Call operator for annular aperture filter in Cartesian coordinates.
+
+        Evaluates the filter by converting to radial coordinates:
+
+        .. math::
+
+             A(u_x, u_y) = A\left(\sqrt{u_x^2 + u_y^2}\right).
+
+        Parameters
+        ----------
+        ux : float
+            Dimensionless spatial frequency component in x-direction.
+        uy : float
+            Dimensionless spatial frequency component in y-direction.
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency coordinates
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::annular::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float64], uy: NDArray[numpy.float64]) -> NDArray[numpy.float64]:
+        r"""
+        Call operator for annular aperture filter in Cartesian coordinates.
+
+        Evaluates the filter by converting to radial coordinates:
+
+        .. math::
+
+             A(u_x, u_y) = A\left(\sqrt{u_x^2 + u_y^2}\right).
+
+        Parameters
+        ----------
+        ux : float
+            Dimensionless spatial frequency component in x-direction.
+        uy : float
+            Dimensionless spatial frequency component in y-direction.
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency coordinates
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::annular::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float128], uy: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         r"""
         Call operator for annular aperture filter in Cartesian coordinates.
 
@@ -253,6 +580,156 @@ class CrossAnnular:
         :external+libweif:cpp:func:`weif::af::cross_annular::operator()` : Base function in C++ library.
         """
 
+    @overload
+    def __call__(self, u: NDArray[numpy.float32]) -> NDArray[numpy.float32]:
+        """
+        Call operator for the aperture filter in radial coordinates.
+
+        Evaluates the filter in radial coordinates.
+
+        Parameters
+        ----------
+        u : float
+            Dimensionless spatial frequency magnitude (radial coordinate)
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::cross_annular::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float64]) -> NDArray[numpy.float64]:
+        """
+        Call operator for the aperture filter in radial coordinates.
+
+        Evaluates the filter in radial coordinates.
+
+        Parameters
+        ----------
+        u : float
+            Dimensionless spatial frequency magnitude (radial coordinate)
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::cross_annular::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
+        """
+        Call operator for the aperture filter in radial coordinates.
+
+        Evaluates the filter in radial coordinates.
+
+        Parameters
+        ----------
+        u : float
+            Dimensionless spatial frequency magnitude (radial coordinate)
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::cross_annular::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float32], uy: NDArray[numpy.float32]) -> NDArray[numpy.float32]:
+        r"""
+        Call operator for the aperture filter in Cartesian coordinates.
+
+        Evaluates the filter by converting to radial coordinates:
+
+        .. math::
+
+             A(u_x, u_y) = A\left(\sqrt{u_x^2 + u_y^2}\right).
+
+        Parameters
+        ----------
+        ux : float
+            Dimensionless spatial frequency component in x-direction.
+        uy : float
+            Dimensionless spatial frequency component in y-direction.
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency coordinates
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::cross_annular::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float64], uy: NDArray[numpy.float64]) -> NDArray[numpy.float64]:
+        r"""
+        Call operator for the aperture filter in Cartesian coordinates.
+
+        Evaluates the filter by converting to radial coordinates:
+
+        .. math::
+
+             A(u_x, u_y) = A\left(\sqrt{u_x^2 + u_y^2}\right).
+
+        Parameters
+        ----------
+        ux : float
+            Dimensionless spatial frequency component in x-direction.
+        uy : float
+            Dimensionless spatial frequency component in y-direction.
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency coordinates
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::cross_annular::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float128], uy: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
+        r"""
+        Call operator for the aperture filter in Cartesian coordinates.
+
+        Evaluates the filter by converting to radial coordinates:
+
+        .. math::
+
+             A(u_x, u_y) = A\left(\sqrt{u_x^2 + u_y^2}\right).
+
+        Parameters
+        ----------
+        ux : float
+            Dimensionless spatial frequency component in x-direction.
+        uy : float
+            Dimensionless spatial frequency component in y-direction.
+
+        Returns
+        -------
+        float
+            Aperture filter value at specified frequency coordinates
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::cross_annular::operator()` : Base function in C++ library.
+        """
+
 class Point:
     """
     Aperture filter function for a point (infinitely small) aperture.
@@ -327,6 +804,168 @@ class Point:
         :external+libweif:cpp:func:`weif::af::point::operator()` : Base function in C++ library.
         """
 
+    @overload
+    def __call__(self, u: NDArray[numpy.float32]) -> NDArray[numpy.float32]:
+        """
+        Call operator for point aperture filter in radial coordinates.
+
+        Evaluates the filter function for a given radial frequency:
+
+        .. math::
+
+             A(u) = 1.
+
+        Parameters
+        ----------
+        u : float
+            Dimensionless spatial frequency magnitude (radial coordinate)
+
+        Returns
+        -------
+        float
+            Aperture filter value (always 1 for point aperture)
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::point::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float64]) -> NDArray[numpy.float64]:
+        """
+        Call operator for point aperture filter in radial coordinates.
+
+        Evaluates the filter function for a given radial frequency:
+
+        .. math::
+
+             A(u) = 1.
+
+        Parameters
+        ----------
+        u : float
+            Dimensionless spatial frequency magnitude (radial coordinate)
+
+        Returns
+        -------
+        float
+            Aperture filter value (always 1 for point aperture)
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::point::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
+        """
+        Call operator for point aperture filter in radial coordinates.
+
+        Evaluates the filter function for a given radial frequency:
+
+        .. math::
+
+             A(u) = 1.
+
+        Parameters
+        ----------
+        u : float
+            Dimensionless spatial frequency magnitude (radial coordinate)
+
+        Returns
+        -------
+        float
+            Aperture filter value (always 1 for point aperture)
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::point::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float32], uy: NDArray[numpy.float32]) -> NDArray[numpy.float32]:
+        """
+        Call operator for point aperture filter in Cartesian coordinates.
+
+        Evaluates the filter function for given frequency components:
+
+        .. math::
+
+             A(u_x, u_y) = 1.
+
+        Parameters
+        ----------
+        ux : float
+            Dimensionless spatial frequency component in x-direction.
+        uy : float
+            Dimensionless spatial frequency component in y-direction.
+
+        Returns
+        -------
+        float
+            Aperture filter value (always 1 for point aperture)
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::point::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float64], uy: NDArray[numpy.float64]) -> NDArray[numpy.float64]:
+        """
+        Call operator for point aperture filter in Cartesian coordinates.
+
+        Evaluates the filter function for given frequency components:
+
+        .. math::
+
+             A(u_x, u_y) = 1.
+
+        Parameters
+        ----------
+        ux : float
+            Dimensionless spatial frequency component in x-direction.
+        uy : float
+            Dimensionless spatial frequency component in y-direction.
+
+        Returns
+        -------
+        float
+            Aperture filter value (always 1 for point aperture)
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::point::operator()` : Base function in C++ library.
+        """
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float128], uy: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
+        """
+        Call operator for point aperture filter in Cartesian coordinates.
+
+        Evaluates the filter function for given frequency components:
+
+        .. math::
+
+             A(u_x, u_y) = 1.
+
+        Parameters
+        ----------
+        ux : float
+            Dimensionless spatial frequency component in x-direction.
+        uy : float
+            Dimensionless spatial frequency component in y-direction.
+
+        Returns
+        -------
+        float
+            Aperture filter value (always 1 for point aperture)
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::af::point::operator()` : Base function in C++ library.
+        """
+
 class Square:
     r"""
     Aperture filter function for a square aperture.
@@ -347,6 +986,7 @@ class Square:
     def __init__(self) -> None:
         """Constructs a square aperture filter."""
 
+    @overload
     def __call__(self, ux: float, uy: float) -> float:
         r"""
         Call operator for square aperture filter in Cartesian coordinates.
@@ -373,3 +1013,12 @@ class Square:
         --------
         :external+libweif:cpp:func:`weif::af::square::operator()` : Base function in C++ library.
         """
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float32], uy: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float64], uy: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float128], uy: NDArray[numpy.float128]) -> NDArray[numpy.float128]: ...
