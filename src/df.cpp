@@ -6,6 +6,7 @@
  */
 
 #include <nanobind/nanobind.h>
+#include <nanobind/xtensor.h>
 #include <nanobind/stl/array.h>
 #include <nanobind/stl/function.h>
 
@@ -34,6 +35,10 @@ fun : Callable[[float, float], float]
 shape : tuple[int, int]
     Filter dimensions (Nx, Ny). The impulse response will be computed
     on a grid of this size.
+impulse_response : array_like (2-D)
+    2-D array containing the filter impulse response values.
+    The shape of the array determines the filter dimensions (Nx, Ny).
+    Used when constructing directly from an impulse response tensor.
 
 See Also
 --------
@@ -78,19 +83,23 @@ constexpr const char* digital_filter_2d_call_doc = R"(
 Evaluates the digital filter at the specified frequency coordinates.
 
 Computes the filter response for the given dimensionless frequency components
-using the discrete Fourier transform of the impulse response.
+using the discrete Fourier transform of the impulse response. The evaluation
+is vectorized: passing arrays returns an array of filter responses.
 
 Parameters
 ----------
-ux : float
+ux : float or array_like
     Dimensionless frequency component in the x-direction.
-uy : float
+    Used when calling with two arguments (scalar or array).
+uy : float or array_like
     Dimensionless frequency component in the y-direction.
+    Used when calling with two arguments (scalar or array).
 
 Returns
 -------
-float
-    Filter response value.
+float or ndarray
+    Filter response value(s). For 1-D arrays ux of shape (N,) and uy of
+    shape (M,), the result is a 2-D array of shape (N, M).
 
 See Also
 --------
@@ -126,8 +135,17 @@ void init_df(nb::module_& m) {
 	using digital_filter_2d_type = weif::digital_filter_2d<value_type>;
 	nb::class_<digital_filter_2d_type>(m, "DigitalFilter2d", digital_filter_2d_doc)
 		.def(nb::init<std::function<value_type(value_type, value_type)>, digital_filter_2d_type::shape_type>(), nb::arg("fun"), nb::arg("shape"))
+		.def(nb::init<const nb::xtensor_view<float, 2>&>(), nb::arg("impulse_response"))
+		.def(nb::init<const nb::xtensor_view<double, 2>&>(), nb::arg("impulse_response"))
+		.def(nb::init<const nb::xtensor_view<long double, 2>&>(), nb::arg("impulse_response"))
 		.def("mix", &digital_filter_2d_type::mix, digital_filter_2d_mix_doc)
 		.def("mixed", &digital_filter_2d_type::mixed, digital_filter_2d_mixed_doc)
-		.def("__call__", get_call<digital_filter_2d_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc);
+		.def("__call__", get_call<digital_filter_2d_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc)
+		.def("__call__", get_call<digital_filter_2d_type(const nb::xarray_view<float>&, const nb::xarray_view<float>&)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc)
+		.def("__call__", get_call<digital_filter_2d_type(const nb::xarray_view<double>&, const nb::xarray_view<double>&)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc)
+		.def("__call__", get_call<digital_filter_2d_type(const nb::xarray_view<long double>&, const nb::xarray_view<long double>&)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc)
+		.def("__call__", get_call<digital_filter_2d_type(const nb::xtensor_view<float, 1>&, const nb::xtensor_view<float, 1>&)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc)
+		.def("__call__", get_call<digital_filter_2d_type(const nb::xtensor_view<double, 1>&, const nb::xtensor_view<double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc)
+		.def("__call__", get_call<digital_filter_2d_type(const nb::xtensor_view<long double, 1>&, const nb::xtensor_view<long double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc);
 }
 

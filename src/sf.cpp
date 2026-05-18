@@ -6,6 +6,7 @@
  */
 
 #include <nanobind/nanobind.h>
+#include <nanobind/xtensor.h>
 
 #include <weif/spectral_response.h>
 
@@ -34,7 +35,9 @@ See Also
 constexpr const char* mono_call_doc = R"(
 Call operator for monochromatic spectral filter.
 
-Evaluates the filter function for a given argument:
+Evaluates the filter function for a given argument. The evaluation is
+vectorized: passing an array returns an array of filter values of the same
+shape.
 
 .. math::
 
@@ -42,13 +45,14 @@ Evaluates the filter function for a given argument:
 
 Parameters
 ----------
-x : float
+x : float or array_like
     Normalized squared frequency :math:`x = z f^2 = \frac{u^2}{\lambda}`.
+    May be a scalar or an array of any shape.
 
 Returns
 -------
-float
-    Filter value at x.
+float or ndarray
+    Filter value(s) at x.
 
 See Also
 --------
@@ -58,17 +62,19 @@ See Also
 constexpr const char* mono_regular_doc = R"(
 Evaluates the regularized monochromatic spectral filter.
 
-Evaluates :math:`x^2 E(x)`.
+Evaluates :math:`x^2 E(x)`. The evaluation is vectorized: passing an array
+returns an array of filter values of the same shape.
 
 Parameters
 ----------
-x : float
+x : float or array_like
     Normalized squared frequency :math:`x = z f^2 = \frac{u^2}{\lambda}`.
+    May be a scalar or an array of any shape.
 
 Returns
 -------
-float
-    Regularized filter value at x.
+float or ndarray
+    Regularized filter value(s) at x.
 
 See Also
 --------
@@ -104,7 +110,9 @@ Reference: Tokovinin (2003) "Polychromatic scintillation", `<https://doi.org/10.
 constexpr const char* gauss_call_doc = R"(
 Call operator for Gaussian spectral filter.
 
-Evaluates the filter function for a given argument:
+Evaluates the filter function for a given argument. The evaluation is
+vectorized: passing an array returns an array of filter values of the same
+shape.
 
 .. math::
 
@@ -112,13 +120,14 @@ Evaluates the filter function for a given argument:
 
 Parameters
 ----------
-x : float
+x : float or array_like
     Normalized squared frequency :math:`x = z f^2 = \frac{u^2}{\lambda}`.
+    May be a scalar or an array of any shape.
 
 Returns
 -------
-float
-    Filter value at x.
+float or ndarray
+    Filter value(s) at x.
 
 See Also
 --------
@@ -128,17 +137,19 @@ See Also
 constexpr const char* gauss_regular_doc = R"(
 Evaluates the regularized Gaussian spectral filter.
 
-Evaluates :math:`x^2 E(x)`.
+Evaluates :math:`x^2 E(x)`. The evaluation is vectorized: passing an array
+returns an array of filter values of the same shape.
 
 Parameters
 ----------
-x : float
+x : float or array_like
     Normalized squared frequency :math:`x = z f^2 = \frac{u^2}{\lambda}`.
+    May be a scalar or an array of any shape.
 
 Returns
 -------
-float
-    Regularized filter value at x.
+float or ndarray
+    Regularized filter value(s) at x.
 
 See Also
 --------
@@ -188,17 +199,20 @@ Reference: Tokovinin (2003) "Polychromatic scintillation", `<https://doi.org/10.
 constexpr const char* poly_call_doc = R"(
 Call operator for polychromatic spectral filter.
 
-Evaluates the filter function for a given argument.
+Evaluates the filter function for a given argument. The evaluation is
+vectorized: passing an array returns an array of filter values of the same
+shape.
 
 Parameters
 ----------
-x : float
+x : float or array_like
     Normalized squared frequency :math:`x = z f^2 = \frac{u^2}{\lambda}`.
+    May be a scalar or an array of any shape.
 
 Returns
 -------
-float
-    Filter value at x.
+float or ndarray
+    Filter value(s) at x.
 
 See Also
 --------
@@ -208,17 +222,19 @@ See Also
 constexpr const char* poly_regular_doc = R"(
 Evaluates the regularized polychromatic spectral filter.
 
-Evaluates :math:`x^2 E(x)`.
+Evaluates :math:`x^2 E(x)`. The evaluation is vectorized: passing an array
+returns an array of filter values of the same shape.
 
 Parameters
 ----------
-x : float
+x : float or array_like
     Normalized squared frequency :math:`x = z f^2 = \frac{u^2}{\lambda}`.
+    May be a scalar or an array of any shape.
 
 Returns
 -------
-float
-    Regularized filter value at x.
+float or ndarray
+    Regularized filter value(s) at x.
 
 See Also
 --------
@@ -278,7 +294,7 @@ template<class T, class... Args> struct get_call_helper<T(Args...)> {
 	};
 
 	static constexpr auto get_regular() noexcept {
-		using R = decltype(std::declval<T>()(std::declval<Args>()...));
+		using R = decltype(std::declval<T>().regular(std::declval<Args>()...));
 
 		return static_cast<R (T::*) (Args...) const>(&T::regular);
 	}
@@ -309,13 +325,25 @@ void init_sf(nb::module_& m) {
 	nb::class_<mono_type>(m, "Mono", mono_doc)
 		.def(nb::init<>())
 		.def("__call__", get_call<mono_type(value_type)>(), nb::arg("x"), mono_call_doc)
-		.def("regular", get_regular<mono_type(value_type)>(), nb::arg("x"), mono_regular_doc);
+		.def("__call__", get_call<mono_type(const nb::xarray_view<float>&)>(), nb::arg("x"), mono_call_doc)
+		.def("__call__", get_call<mono_type(const nb::xarray_view<double>&)>(), nb::arg("x"), mono_call_doc)
+		.def("__call__", get_call<mono_type(const nb::xarray_view<long double>&)>(), nb::arg("x"), mono_call_doc)
+		.def("regular", get_regular<mono_type(value_type)>(), nb::arg("x"), mono_regular_doc)
+		.def("regular", get_regular<mono_type(const nb::xarray_view<float>&)>(), nb::arg("x"), mono_regular_doc)
+		.def("regular", get_regular<mono_type(const nb::xarray_view<double>&)>(), nb::arg("x"), mono_regular_doc)
+		.def("regular", get_regular<mono_type(const nb::xarray_view<long double>&)>(), nb::arg("x"), mono_regular_doc);
 
 	using gauss_type = sf::gauss<value_type>;
 	nb::class_<gauss_type>(m, "Gauss", gauss_doc)
 		.def(nb::init<value_type>(), nb::arg("fwhm"))
 		.def("__call__", get_call<gauss_type(value_type)>(), nb::arg("x"), gauss_call_doc)
-		.def("regular", get_regular<gauss_type(value_type)>(), nb::arg("x"), gauss_regular_doc);
+		.def("__call__", get_call<gauss_type(const nb::xarray_view<float>&)>(), nb::arg("x"), gauss_call_doc)
+		.def("__call__", get_call<gauss_type(const nb::xarray_view<double>&)>(), nb::arg("x"), gauss_call_doc)
+		.def("__call__", get_call<gauss_type(const nb::xarray_view<long double>&)>(), nb::arg("x"), gauss_call_doc)
+		.def("regular", get_regular<gauss_type(value_type)>(), nb::arg("x"), gauss_regular_doc)
+		.def("regular", get_regular<gauss_type(const nb::xarray_view<float>&)>(), nb::arg("x"), gauss_regular_doc)
+		.def("regular", get_regular<gauss_type(const nb::xarray_view<double>&)>(), nb::arg("x"), gauss_regular_doc)
+		.def("regular", get_regular<gauss_type(const nb::xarray_view<long double>&)>(), nb::arg("x"), gauss_regular_doc);
 
 	using spectral_response_type = weif::spectral_response<value_type>;
 	using poly_type = sf::poly<value_type>;
@@ -323,7 +351,13 @@ void init_sf(nb::module_& m) {
 		.def(nb::init<const spectral_response_type&, std::size_t>(), nb::arg("response"), nb::arg("size"))
 		.def(nb::init<const spectral_response_type&, std::size_t, value_type>(), nb::arg("response"), nb::arg("size"), nb::arg("carrier"))
 		.def("__call__", get_call<poly_type(value_type)>(), nb::arg("x"), poly_call_doc)
+		.def("__call__", get_call<poly_type(const nb::xarray_view<float>&)>(), nb::arg("x"), poly_call_doc)
+		.def("__call__", get_call<poly_type(const nb::xarray_view<double>&)>(), nb::arg("x"), poly_call_doc)
+		.def("__call__", get_call<poly_type(const nb::xarray_view<long double>&)>(), nb::arg("x"), poly_call_doc)
 		.def("regular", get_regular<poly_type(value_type)>(), nb::arg("x"), poly_regular_doc)
+		.def("regular", get_regular<poly_type(const nb::xarray_view<float>&)>(), nb::arg("x"), poly_regular_doc)
+		.def("regular", get_regular<poly_type(const nb::xarray_view<double>&)>(), nb::arg("x"), poly_regular_doc)
+		.def("regular", get_regular<poly_type(const nb::xarray_view<long double>&)>(), nb::arg("x"), poly_regular_doc)
 		.def("normalize", &poly_type::normalize, poly_normalize_doc)
 		.def("normalized", &poly_type::normalized, poly_normalized_doc)
 		.def("equiv_lambda", &poly_type::equiv_lambda, poly_equiv_lambda_doc)

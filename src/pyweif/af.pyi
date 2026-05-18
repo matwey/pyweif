@@ -2,6 +2,9 @@
 
 from typing import overload
 
+import numpy
+from numpy.typing import NDArray
+
 
 class Circular:
     """
@@ -29,12 +32,31 @@ class Circular:
     def __call__(self, u: float) -> float: ...
 
     @overload
-    def __call__(self, ux: float, uy: float) -> float:
+    def __call__(self, ux: float, uy: float) -> float: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float128]) -> NDArray[numpy.float128]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float32], uy: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float64], uy: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float128], uy: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Call operator for circular aperture filter in radial and Cartesian coordinates.
 
         Evaluates the squared jinc function at the given spatial frequency, either in
-        radial or Cartesian coordinates:
+        radial or Cartesian coordinates. The evaluation is vectorized: passing arrays
+        returns an array of filter values.
 
         .. math::
 
@@ -43,20 +65,21 @@ class Circular:
 
         Parameters
         ----------
-        u : float
+        u : float or array_like
             Dimensionless spatial frequency magnitude (radial coordinate).
-            Used when calling with a single argument.
-        ux : float
+            Used when calling with a single argument (scalar or array of any shape).
+        ux : float or array_like
             Dimensionless spatial frequency component in the x-direction.
-            Used when calling with two arguments (Cartesian coordinates).
-        uy : float
+            Used when calling with two arguments (scalar or 1-D array).
+        uy : float or array_like
             Dimensionless spatial frequency component in the y-direction.
-            Used when calling with two arguments (Cartesian coordinates).
+            Used when calling with two arguments (scalar or 1-D array).
 
         Returns
         -------
-        float
-            Aperture filter value at the specified frequency.
+        float or ndarray
+            Aperture filter value(s). For 1-D arrays ux of shape (N,) and uy of
+            shape (M,), the result is a 2-D array of shape (N, M).
 
         See Also
         --------
@@ -95,12 +118,31 @@ class Annular:
     def __call__(self, u: float) -> float: ...
 
     @overload
-    def __call__(self, ux: float, uy: float) -> float:
+    def __call__(self, ux: float, uy: float) -> float: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float128]) -> NDArray[numpy.float128]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float32], uy: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float64], uy: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float128], uy: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Call operator for annular aperture filter in radial and Cartesian coordinates.
 
         Evaluates the squared normalized difference of jinc functions at the given
-        spatial frequency, either in radial or Cartesian coordinates:
+        spatial frequency, either in radial or Cartesian coordinates. The evaluation
+        is vectorized: passing arrays returns an array of filter values.
 
         .. math::
 
@@ -109,20 +151,21 @@ class Annular:
 
         Parameters
         ----------
-        u : float
+        u : float or array_like
             Dimensionless spatial frequency magnitude (radial coordinate).
-            Used when calling with a single argument.
-        ux : float
+            Used when calling with a single argument (scalar or array of any shape).
+        ux : float or array_like
             Dimensionless spatial frequency component in the x-direction.
-            Used when calling with two arguments (Cartesian coordinates).
-        uy : float
+            Used when calling with two arguments (scalar or 1-D array).
+        uy : float or array_like
             Dimensionless spatial frequency component in the y-direction.
-            Used when calling with two arguments (Cartesian coordinates).
+            Used when calling with two arguments (scalar or 1-D array).
 
         Returns
         -------
-        float
-            Aperture filter value at the specified frequency.
+        float or ndarray
+            Aperture filter value(s). For 1-D arrays ux of shape (N,) and uy of
+            shape (M,), the result is a 2-D array of shape (N, M).
 
         See Also
         --------
@@ -169,12 +212,31 @@ class CrossAnnular:
     def __call__(self, u: float) -> float: ...
 
     @overload
-    def __call__(self, ux: float, uy: float) -> float:
+    def __call__(self, ux: float, uy: float) -> float: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float128]) -> NDArray[numpy.float128]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float32], uy: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float64], uy: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float128], uy: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Call operator for cross-annular aperture filter in radial and Cartesian coordinates.
 
         Evaluates the covariance filter at the given spatial frequency, either in
-        radial or Cartesian coordinates:
+        radial or Cartesian coordinates. The evaluation is vectorized: passing arrays
+        returns an array of filter values.
 
         .. math::
 
@@ -184,20 +246,21 @@ class CrossAnnular:
 
         Parameters
         ----------
-        u : float
+        u : float or array_like
             Dimensionless spatial frequency magnitude (radial coordinate).
-            Used when calling with a single argument.
-        ux : float
+            Used when calling with a single argument (scalar or array of any shape).
+        ux : float or array_like
             Dimensionless spatial frequency component in the x-direction.
-            Used when calling with two arguments (Cartesian coordinates).
-        uy : float
+            Used when calling with two arguments (scalar or 1-D array).
+        uy : float or array_like
             Dimensionless spatial frequency component in the y-direction.
-            Used when calling with two arguments (Cartesian coordinates).
+            Used when calling with two arguments (scalar or 1-D array).
 
         Returns
         -------
-        float
-            Aperture filter value at the specified frequency.
+        float or ndarray
+            Aperture filter value(s). For 1-D arrays ux of shape (N,) and uy of
+            shape (M,), the result is a 2-D array of shape (N, M).
 
         See Also
         --------
@@ -227,12 +290,31 @@ class Point:
     def __call__(self, u: float) -> float: ...
 
     @overload
-    def __call__(self, ux: float, uy: float) -> float:
+    def __call__(self, ux: float, uy: float) -> float: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, u: NDArray[numpy.float128]) -> NDArray[numpy.float128]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float32], uy: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float64], uy: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float128], uy: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Call operator for point aperture filter in radial and Cartesian coordinates.
 
         Evaluates the aperture filter at the given spatial frequency, either in radial
-        or Cartesian coordinates:
+        or Cartesian coordinates. The evaluation is vectorized: passing arrays returns
+        an array of filter values.
 
         .. math::
 
@@ -241,20 +323,22 @@ class Point:
 
         Parameters
         ----------
-        u : float
+        u : float or array_like
             Dimensionless spatial frequency magnitude (radial coordinate).
-            Used when calling with a single argument.
-        ux : float
+            Used when calling with a single argument (scalar or array of any shape).
+        ux : float or array_like
             Dimensionless spatial frequency component in the x-direction.
-            Used when calling with two arguments (Cartesian coordinates).
-        uy : float
+            Used when calling with two arguments (scalar or 1-D array).
+        uy : float or array_like
             Dimensionless spatial frequency component in the y-direction.
-            Used when calling with two arguments (Cartesian coordinates).
+            Used when calling with two arguments (scalar or 1-D array).
 
         Returns
         -------
-        float
-            Aperture filter value at the specified frequency, always 1 for a point aperture.
+        float or ndarray
+            Aperture filter value(s), always 1 for a point aperture. For 1-D arrays
+            ux of shape (N,) and uy of shape (M,), the result is a 2-D array of
+            shape (N, M).
 
         See Also
         --------
@@ -280,11 +364,22 @@ class Square:
 
     def __init__(self) -> None: ...
 
-    def __call__(self, ux: float, uy: float) -> float:
+    @overload
+    def __call__(self, ux: float, uy: float) -> float: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float32], uy: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float64], uy: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float128], uy: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Call operator for square aperture filter in Cartesian coordinates.
 
-        Evaluates the squared 2D sinc function:
+        Evaluates the squared 2D sinc function. The evaluation is vectorized: passing
+        arrays returns an array of filter values.
 
         .. math::
 
@@ -292,15 +387,18 @@ class Square:
 
         Parameters
         ----------
-        ux : float
+        ux : float or array_like
             Dimensionless spatial frequency component in the x-direction.
-        uy : float
+            Used when calling with two arguments (scalar or 1-D array).
+        uy : float or array_like
             Dimensionless spatial frequency component in the y-direction.
+            Used when calling with two arguments (scalar or 1-D array).
 
         Returns
         -------
-        float
-            Aperture filter value at the specified frequency.
+        float or ndarray
+            Aperture filter value(s). For 1-D arrays ux of shape (N,) and uy of
+            shape (M,), the result is a 2-D array of shape (N, M).
 
         See Also
         --------
