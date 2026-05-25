@@ -33,16 +33,9 @@ The build requires the following dependencies:
 - The :external+libweif:doc:`libweif <index>` C++ library
 
 The simplest way to satisfy the ``libweif`` dependency is to use `vcpkg <https://vcpkg.io>`_.
-The repository contains a ``vcpkg.json`` manifest that declares the required ports::
-
-    {
-      "dependencies": [
-        "boost-compat",
-        "libweif"
-      ]
-    }
-
+The repository contains a ``vcpkg.json`` manifest that declares the required ports.
 If you have vcpkg installed and configured (e.g., via ``CMAKE_TOOLCHAIN_FILE``), the build will automatically fetch and build ``libweif`` and its dependencies.
+
 Alternatively, you can install ``libweif`` system‑wide or in any other path if ``PKG_CONFIG_PATH`` is set accordingly.
 
 Once the dependencies are available, the package can be built with::
