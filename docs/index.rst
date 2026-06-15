@@ -6,6 +6,7 @@ Welcome to pyweif's documentation!
    :maxdepth: 3
    :caption: Contents:
 
+   tutorials
    howto
    autoapi/index
 
