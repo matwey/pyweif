@@ -46,15 +46,12 @@ extras = ["dev"]
 commands = [["python", "-m", "pytest"]]
 passenv = ["CMAKE_TOOLCHAIN_FILE"]
 
-[tool.tox.env.stubgen]
-description = "Check that stubgen does not modify any .pyi files"
+[tool.tox.env.pre-commit]
+description = "Run pre-commit hooks over all files"
 extras = ["dev"]
-commands = [
-    ["python", "-m", "nanobind.stubgen", "-m", "pyweif", "-r", "-O", "src", "-M", "src/pyweif/py.typed"],
-    ["git", "diff", "--quiet", "--exit-code"]
-]
+deps = ["pre-commit"]
+commands = [["python", "-m", "pre_commit", "run", "--all-files", "--show-diff-on-failure"]]
 passenv = ["CMAKE_TOOLCHAIN_FILE"]
-allowlist_externals = ["git"]
 
 [tool.pytest.ini_options]
 markers = [

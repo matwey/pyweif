@@ -1,0 +1,10 @@
+repos:
+  - repo: local
+    hooks:
+      - id: nanobind-stubgen
+        name: Generate nanobind stubs
+        language: system
+        entry: python -m nanobind.stubgen
+        args: ["-m", "pyweif", "-r", "-O", "src", "-M", "src/pyweif/py.typed"]
+        files: ^(src/.*\.cpp|src/.*\.h)$
+        pass_filenames: false

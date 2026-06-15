@@ -41,8 +41,8 @@ jobs:
       run: |
         tox -e py${{ matrix.python-version }}
 
-  stubgen:
-    name: Check stub generation
+  pre-commit:
+    name: Check pre-commit hooks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -62,15 +62,15 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install tox
 
-      - name: Run stubgen
+      - name: Run pre-commit
         env:
           CMAKE_TOOLCHAIN_FILE: '${{env.VCPKG_ROOT}}/scripts/buildsystems/vcpkg.cmake'
         run: |
-          tox -e stubgen
+          tox -e pre-commit
 
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
-    needs: [ build, stubgen ]
+    needs: [ build, pre-commit ]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
