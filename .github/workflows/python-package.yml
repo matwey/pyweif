@@ -25,10 +25,15 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
+    - name: Restore vcpkg cache
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{github.workspace}}/.cache/vcpkg
+        key: vcpkg-${{runner.os}}-${{runner.arch}}-${{ hashFiles('vcpkg.json') }}
+        restore-keys: vcpkg-${{runner.os}}-${{runner.arch}}-
+
     - name: Setup vcpkg
       uses: lukka/run-vcpkg@v11
-      with:
-        doNotCache: false
 
     - name: Install dependencies
       run: |
@@ -38,8 +43,15 @@ jobs:
     - name: Test with tox
       env:
         CMAKE_TOOLCHAIN_FILE: '${{env.VCPKG_ROOT}}/scripts/buildsystems/vcpkg.cmake'
+        VCPKG_BINARY_SOURCES: 'clear;files,${{github.workspace}}/.cache/vcpkg,readwrite'
       run: |
         tox -e py${{ matrix.python-version }}
+
+    - name: Save vcpkg cache
+      uses: actions/cache/save@v4
+      with:
+        path: ${{github.workspace}}/.cache/vcpkg
+        key: vcpkg-${{runner.os}}-${{runner.arch}}-${{ hashFiles('vcpkg.json') }}
 
   pre-commit:
     name: Check pre-commit hooks
@@ -52,10 +64,15 @@ jobs:
         with:
           python-version: "3.13"
 
+      - name: Restore vcpkg cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{github.workspace}}/.cache/vcpkg
+          key: vcpkg-${{runner.os}}-${{runner.arch}}-${{ hashFiles('vcpkg.json') }}
+          restore-keys: vcpkg-${{runner.os}}-${{runner.arch}}-
+
       - name: Setup vcpkg
         uses: lukka/run-vcpkg@v11
-        with:
-          doNotCache: false
 
       - name: Install dependencies
         run: |
@@ -65,8 +82,15 @@ jobs:
       - name: Run pre-commit
         env:
           CMAKE_TOOLCHAIN_FILE: '${{env.VCPKG_ROOT}}/scripts/buildsystems/vcpkg.cmake'
+          VCPKG_BINARY_SOURCES: 'clear;files,${{github.workspace}}/.cache/vcpkg,readwrite'
         run: |
           tox -e pre-commit
+
+      - name: Save vcpkg cache
+        uses: actions/cache/save@v4
+        with:
+          path: ${{github.workspace}}/.cache/vcpkg
+          key: vcpkg-${{runner.os}}-${{runner.arch}}-${{ hashFiles('vcpkg.json') }}
 
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
