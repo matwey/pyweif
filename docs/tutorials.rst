@@ -10,3 +10,4 @@ The following Jupyter notebooks provide practical examples demonstrating how to 
 
    notebooks/aperture_filter
    notebooks/spectral_filter
+   notebooks/weight_function
