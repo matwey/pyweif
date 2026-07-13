@@ -2,6 +2,9 @@
 
 from typing import overload
 
+import numpy
+from numpy.typing import NDArray
+
 import pyweif
 
 
@@ -25,6 +28,7 @@ class Mono:
     def __init__(self) -> None:
         """Constructs a monochromatic spectral filter."""
 
+    @overload
     def __call__(self, x: float) -> float:
         r"""
         Call operator for monochromatic spectral filter.
@@ -50,6 +54,16 @@ class Mono:
         :external+libweif:cpp:func:`weif::sf::mono::operator()` : Base function in C++ library.
         """
 
+    @overload
+    def __call__(self, x: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, x: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, x: NDArray[numpy.float128]) -> NDArray[numpy.float128]: ...
+
+    @overload
     def regular(self, x: float) -> float:
         r"""
         Evaluate regularized monochromatic spectral filter.
@@ -70,6 +84,15 @@ class Mono:
         --------
         :external+libweif:cpp:func:`weif::sf::mono::regular` : Base function in C++ library.
         """
+
+    @overload
+    def regular(self, x: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def regular(self, x: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def regular(self, x: NDArray[numpy.float128]) -> NDArray[numpy.float128]: ...
 
 class Gauss:
     r"""
@@ -102,6 +125,7 @@ class Gauss:
             Full width at half maximum :math:`\Lambda` of the Gaussian envelope expressed in relative units.
         """
 
+    @overload
     def __call__(self, x: float) -> float:
         r"""
         Call operator for Gaussian spectral filter.
@@ -127,6 +151,16 @@ class Gauss:
         :external+libweif:cpp:func:`weif::sf::gauss::operator()` : Base function in C++ library.
         """
 
+    @overload
+    def __call__(self, x: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, x: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, x: NDArray[numpy.float128]) -> NDArray[numpy.float128]: ...
+
+    @overload
     def regular(self, x: float) -> float:
         r"""
         Evaluate regularized Gaussian spectral filter.
@@ -147,6 +181,15 @@ class Gauss:
         --------
         :external+libweif:cpp:func:`weif::sf::gauss::regular` : Base function in C++ library.
         """
+
+    @overload
+    def regular(self, x: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def regular(self, x: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def regular(self, x: NDArray[numpy.float128]) -> NDArray[numpy.float128]: ...
 
 class Poly:
     """
@@ -205,6 +248,7 @@ class Poly:
             Carrier wavelength.
         """
 
+    @overload
     def __call__(self, x: float) -> float:
         r"""
         Call operator for polychromatic spectral filter.
@@ -226,6 +270,16 @@ class Poly:
         :external+libweif:cpp:func:`weif::sf::poly::operator()` : Base function in C++ library.
         """
 
+    @overload
+    def __call__(self, x: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, x: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, x: NDArray[numpy.float128]) -> NDArray[numpy.float128]: ...
+
+    @overload
     def regular(self, x: float) -> float:
         r"""
         Evaluate regularized polychromatic spectral filter.
@@ -246,6 +300,15 @@ class Poly:
         --------
         :external+libweif:cpp:func:`weif::sf::poly::regular` : Base function in C++ library.
         """
+
+    @overload
+    def regular(self, x: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def regular(self, x: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def regular(self, x: NDArray[numpy.float128]) -> NDArray[numpy.float128]: ...
 
     def normalize(self) -> Poly:
         """

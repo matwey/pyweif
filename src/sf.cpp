@@ -6,6 +6,7 @@
  */
 
 #include <nanobind/nanobind.h>
+#include <nanobind/xtensor.h>
 
 #include <weif/spectral_response.h>
 
@@ -296,18 +297,18 @@ template<class T, class... Args> struct get_call_helper<T(Args...)> {
 	};
 
 	static constexpr auto get_regular() noexcept {
-		using R = decltype(std::declval<T>()(std::declval<Args>()...));
+		using R = decltype(std::declval<T>().regular(std::declval<Args>()...));
 
 		return static_cast<R (T::*) (Args...) const>(&T::regular);
 	}
 };
 
-template<class, class F>
+template<class F>
 constexpr auto get_call() noexcept {
 	return get_call_helper<F>::get_call();
 }
 
-template<class, class F>
+template<class F>
 constexpr auto get_regular() noexcept {
 	return get_call_helper<F>::get_regular();
 }
@@ -326,22 +327,40 @@ void init_sf(nb::module_& m) {
 	using mono_type = sf::mono<value_type>;
 	nb::class_<mono_type>(m, "Mono", mono_doc)
 		.def(nb::init<>(), mono_init_doc)
-		.def("__call__", get_call<value_type, mono_type(value_type)>(), nb::arg("x"), mono_call_doc)
-		.def("regular", get_regular<value_type, mono_type(value_type)>(), nb::arg("x"), mono_regular_doc);
+		.def("__call__", get_call<mono_type(value_type)>(), nb::arg("x"), mono_call_doc)
+		.def("__call__", get_call<mono_type(const nb::xarray_view<float>&)>(), nb::arg("x"), mono_call_doc)
+		.def("__call__", get_call<mono_type(const nb::xarray_view<double>&)>(), nb::arg("x"), mono_call_doc)
+		.def("__call__", get_call<mono_type(const nb::xarray_view<long double>&)>(), nb::arg("x"), mono_call_doc)
+		.def("regular", get_regular<mono_type(value_type)>(), nb::arg("x"), mono_regular_doc)
+		.def("regular", get_regular<mono_type(const nb::xarray_view<float>&)>(), nb::arg("x"), mono_regular_doc)
+		.def("regular", get_regular<mono_type(const nb::xarray_view<double>&)>(), nb::arg("x"), mono_regular_doc)
+		.def("regular", get_regular<mono_type(const nb::xarray_view<long double>&)>(), nb::arg("x"), mono_regular_doc);
 
 	using gauss_type = sf::gauss<value_type>;
 	nb::class_<gauss_type>(m, "Gauss", gauss_doc)
 		.def(nb::init<value_type>(), nb::arg("fwhm"), gauss_init_doc)
-		.def("__call__", get_call<value_type, gauss_type(value_type)>(), nb::arg("x"), gauss_call_doc)
-		.def("regular", get_regular<value_type, gauss_type(value_type)>(), nb::arg("x"), gauss_regular_doc);
+		.def("__call__", get_call<gauss_type(value_type)>(), nb::arg("x"), gauss_call_doc)
+		.def("__call__", get_call<gauss_type(const nb::xarray_view<float>&)>(), nb::arg("x"), gauss_call_doc)
+		.def("__call__", get_call<gauss_type(const nb::xarray_view<double>&)>(), nb::arg("x"), gauss_call_doc)
+		.def("__call__", get_call<gauss_type(const nb::xarray_view<long double>&)>(), nb::arg("x"), gauss_call_doc)
+		.def("regular", get_regular<gauss_type(value_type)>(), nb::arg("x"), gauss_regular_doc)
+		.def("regular", get_regular<gauss_type(const nb::xarray_view<float>&)>(), nb::arg("x"), gauss_regular_doc)
+		.def("regular", get_regular<gauss_type(const nb::xarray_view<double>&)>(), nb::arg("x"), gauss_regular_doc)
+		.def("regular", get_regular<gauss_type(const nb::xarray_view<long double>&)>(), nb::arg("x"), gauss_regular_doc);
 
 	using spectral_response_type = weif::spectral_response<value_type>;
 	using poly_type = sf::poly<value_type>;
 	nb::class_<poly_type>(m, "Poly", poly_doc)
 		.def(nb::init<const spectral_response_type&, std::size_t>(), nb::arg("response"), nb::arg("size"), poly_init_doc)
 		.def(nb::init<const spectral_response_type&, std::size_t, value_type>(), nb::arg("response"), nb::arg("size"), nb::arg("carrier"), poly_init_carrier_doc)
-		.def("__call__", get_call<value_type, poly_type(value_type)>(), nb::arg("x"), poly_call_doc)
-		.def("regular", get_regular<value_type, poly_type(value_type)>(), nb::arg("x"), poly_regular_doc)
+		.def("__call__", get_call<poly_type(value_type)>(), nb::arg("x"), poly_call_doc)
+		.def("__call__", get_call<poly_type(const nb::xarray_view<float>&)>(), nb::arg("x"), poly_call_doc)
+		.def("__call__", get_call<poly_type(const nb::xarray_view<double>&)>(), nb::arg("x"), poly_call_doc)
+		.def("__call__", get_call<poly_type(const nb::xarray_view<long double>&)>(), nb::arg("x"), poly_call_doc)
+		.def("regular", get_regular<poly_type(value_type)>(), nb::arg("x"), poly_regular_doc)
+		.def("regular", get_regular<poly_type(const nb::xarray_view<float>&)>(), nb::arg("x"), poly_regular_doc)
+		.def("regular", get_regular<poly_type(const nb::xarray_view<double>&)>(), nb::arg("x"), poly_regular_doc)
+		.def("regular", get_regular<poly_type(const nb::xarray_view<long double>&)>(), nb::arg("x"), poly_regular_doc)
 		.def("normalize", &poly_type::normalize, poly_normalize_doc)
 		.def("normalized", &poly_type::normalized, poly_normalized_doc)
 		.def("equiv_lambda", &poly_type::equiv_lambda, poly_equiv_lambda_doc)

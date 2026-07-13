@@ -6,6 +6,7 @@
  */
 
 #include <nanobind/nanobind.h>
+#include <nanobind/xtensor.h>
 #include <nanobind/stl/array.h>
 #include <nanobind/stl/function.h>
 
@@ -42,6 +43,20 @@ fun : Callable[[float, float], float]
 shape : tuple[int, int]
     Filter dimensions (Nx, Ny). The impulse response will be computed
     on a grid of this size.
+
+See Also
+--------
+:external+libweif:cpp:func:`weif::digital_filter_2d::digital_filter_2d` : Base constructor in C++ library.
+)";
+
+constexpr const char* digital_filter_2d_init_tensor_doc = R"(
+Construct digital filter directly from impulse response tensor.
+
+Parameters
+----------
+impulse_response : ndarray
+    2‑D array containing the filter impulse response values.
+    The shape of the array determines the filter dimensions (Nx, Ny).
 
 See Also
 --------
@@ -114,7 +129,7 @@ template<class T, class... Args> struct get_call_helper<T(Args...)> {
 	};
 };
 
-template<class, class F>
+template<class F>
 constexpr auto get_call() noexcept {
 	return get_call_helper<F>::get_call();
 }
@@ -133,8 +148,17 @@ void init_df(nb::module_& m) {
 	using digital_filter_2d_type = weif::digital_filter_2d<value_type>;
 	nb::class_<digital_filter_2d_type>(m, "DigitalFilter2d", digital_filter_2d_doc)
 		.def(nb::init<std::function<value_type(value_type, value_type)>, digital_filter_2d_type::shape_type>(), nb::arg("fun"), nb::arg("shape"), digital_filter_2d_init_doc)
+		.def(nb::init<const nb::xtensor_view<float, 2>&>(), nb::arg("impulse_response"), digital_filter_2d_init_tensor_doc)
+		.def(nb::init<const nb::xtensor_view<double, 2>&>(), nb::arg("impulse_response"), digital_filter_2d_init_tensor_doc)
+		.def(nb::init<const nb::xtensor_view<long double, 2>&>(), nb::arg("impulse_response"), digital_filter_2d_init_tensor_doc)
 		.def("mix", &digital_filter_2d_type::mix, digital_filter_2d_mix_doc)
 		.def("mixed", &digital_filter_2d_type::mixed, digital_filter_2d_mixed_doc)
-		.def("__call__", get_call<value_type, digital_filter_2d_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc);
+		.def("__call__", get_call<digital_filter_2d_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc)
+		.def("__call__", get_call<digital_filter_2d_type(const nb::xarray_view<float>&, const nb::xarray_view<float>&)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc)
+		.def("__call__", get_call<digital_filter_2d_type(const nb::xarray_view<double>&, const nb::xarray_view<double>&)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc)
+		.def("__call__", get_call<digital_filter_2d_type(const nb::xarray_view<long double>&, const nb::xarray_view<long double>&)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc)
+		.def("__call__", get_call<digital_filter_2d_type(const nb::xtensor_view<float, 1>&, const nb::xtensor_view<float, 1>&)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc)
+		.def("__call__", get_call<digital_filter_2d_type(const nb::xtensor_view<double, 1>&, const nb::xtensor_view<double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc)
+		.def("__call__", get_call<digital_filter_2d_type(const nb::xtensor_view<long double, 1>&, const nb::xtensor_view<long double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc);
 }
 

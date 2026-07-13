@@ -1,6 +1,9 @@
 from collections.abc import Callable, Iterable
 from typing import overload
 
+import numpy
+from numpy.typing import NDArray
+
 from . import af as af, df as df, sf as sf
 
 
@@ -72,6 +75,9 @@ class SpectralResponse:
         --------
         :external+libweif:cpp:func:`weif::spectral_response::stack_from_files` : Base function in C++ library.
         """
+
+    @overload
+    def __init__(self, data: NDArray[numpy.float64], *, origin: float, delta: float) -> None: ...
 
     def normalize(self) -> SpectralResponse:
         r"""
@@ -177,6 +183,24 @@ class SpectralResponse:
         :external+libweif:cpp:func:`weif::spectral_response::effective_lambda` : Base function in C++ library.
         """
 
+    def grid(self) -> NDArray[numpy.float64]: ...
+
+    def data(self) -> NDArray[numpy.float64]:
+        """
+        Returns the spectral response curve data.
+
+        The data is a 1‑D array of response values corresponding to the wavelength grid.
+
+        Returns
+        -------
+        ndarray
+            One‑dimensional array of response values (same length as the wavelength grid).
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::spectral_response::data` : Base method in C++ library.
+        """
+
 class WeightFunction:
     r"""
     Scintillation weight function for axially symmetric power spectra.
@@ -227,6 +251,7 @@ class WeightFunction:
         :external+libweif:cpp:func:`weif::weight_function::weight_function` : Base constructor in C++ library.
         """
 
+    @overload
     def __call__(self, altitude: float) -> float:
         """
         Evaluate scintillation weight function at specific altitude.
@@ -245,6 +270,24 @@ class WeightFunction:
         --------
         :external+libweif:cpp:func:`weif::weight_function::operator()` : Base function in C++ library.
         """
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float32]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float128]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float32]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float128]) -> NDArray[numpy.float64]: ...
 
 class WeightFunction2d:
     r"""
@@ -296,6 +339,7 @@ class WeightFunction2d:
         :external+libweif:cpp:func:`weif::weight_function_2d::weight_function_2d` : Base constructor in C++ library.
         """
 
+    @overload
     def __call__(self, altitude: float) -> float:
         """
         Evaluate scintillation weight function at specific altitude.
@@ -314,3 +358,21 @@ class WeightFunction2d:
         --------
         :external+libweif:cpp:func:`weif::weight_function_2d::operator()` : Base function in C++ library.
         """
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float32]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float128]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float32]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float128]) -> NDArray[numpy.float64]: ...

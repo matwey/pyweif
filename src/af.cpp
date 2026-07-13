@@ -6,6 +6,7 @@
  */
 
 #include <nanobind/nanobind.h>
+#include <nanobind/xtensor.h>
 
 #include "af.h"
 
@@ -373,7 +374,7 @@ template<class T, class... Args> struct get_call_helper<T(Args...)> {
 	};
 };
 
-template<class, class F>
+template<class F>
 constexpr auto get_call() noexcept {
 	return get_call_helper<F>::get_call();
 }
@@ -392,29 +393,56 @@ void init_af(nb::module_& m) {
 	using circular_type = af::circular<value_type>;
 	nb::class_<circular_type>(m, "Circular", circular_doc)
 		.def(nb::init<>(), circular_init_doc)
-		.def("__call__", get_call<value_type, circular_type(value_type)>(), nb::arg("u"), circular_call1_doc)
-		.def("__call__", get_call<value_type, circular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), circular_call2_doc);
+		.def("__call__", get_call<circular_type(value_type)>(), nb::arg("u"), circular_call1_doc)
+		.def("__call__", get_call<circular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), circular_call2_doc)
+		.def("__call__", get_call<circular_type(const nb::xarray_view<float>&)>(), nb::arg("u"), circular_call1_doc)
+		.def("__call__", get_call<circular_type(const nb::xarray_view<double>&)>(), nb::arg("u"), circular_call1_doc)
+		.def("__call__", get_call<circular_type(const nb::xarray_view<long double>&)>(), nb::arg("u"), circular_call1_doc)
+		.def("__call__", get_call<circular_type(const nb::xtensor_view<float, 1>&, const nb::xtensor_view<float, 1>&)>(), nb::arg("ux"), nb::arg("uy"), circular_call2_doc)
+		.def("__call__", get_call<circular_type(const nb::xtensor_view<double, 1>&, const nb::xtensor_view<double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), circular_call2_doc)
+		.def("__call__", get_call<circular_type(const nb::xtensor_view<long double, 1>&, const nb::xtensor_view<long double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), circular_call2_doc);
 
 	using annular_type = af::annular<value_type>;
 	nb::class_<af::annular<value_type>>(m, "Annular", annular_doc)
 		.def(nb::init<value_type>(), nb::arg("obscuration"), annular_init_doc)
-		.def("__call__", get_call<value_type, annular_type(value_type)>(), nb::arg("u"), annular_call1_doc)
-		.def("__call__", get_call<value_type, annular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), annular_call2_doc);
+		.def("__call__", get_call<annular_type(value_type)>(), nb::arg("u"), annular_call1_doc)
+		.def("__call__", get_call<annular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), annular_call2_doc)
+		.def("__call__", get_call<annular_type(const nb::xarray_view<float>&)>(), nb::arg("u"), annular_call1_doc)
+		.def("__call__", get_call<annular_type(const nb::xarray_view<double>&)>(), nb::arg("u"), annular_call1_doc)
+		.def("__call__", get_call<annular_type(const nb::xarray_view<long double>&)>(), nb::arg("u"), annular_call1_doc)
+		.def("__call__", get_call<annular_type(const nb::xtensor_view<float, 1>&, const nb::xtensor_view<float, 1>&)>(), nb::arg("ux"), nb::arg("uy"), annular_call2_doc)
+		.def("__call__", get_call<annular_type(const nb::xtensor_view<double, 1>&, const nb::xtensor_view<double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), annular_call2_doc)
+		.def("__call__", get_call<annular_type(const nb::xtensor_view<long double, 1>&, const nb::xtensor_view<long double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), annular_call2_doc);
 
 	using cross_annular_type = af::cross_annular<value_type>;
 	nb::class_<af::cross_annular<value_type>>(m, "CrossAnnular", cross_annular_doc)
 		.def(nb::init<value_type, value_type, value_type>(), nb::arg("ratio"), nb::arg("obscuration_first"), nb::arg("obscuration_second"), cross_annular_init_doc)
-		.def("__call__", get_call<value_type, cross_annular_type(value_type)>(), nb::arg("u"), cross_annular_call1_doc)
-		.def("__call__", get_call<value_type, cross_annular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), cross_annular_call2_doc);
+		.def("__call__", get_call<cross_annular_type(value_type)>(), nb::arg("u"), cross_annular_call1_doc)
+		.def("__call__", get_call<cross_annular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), cross_annular_call2_doc)
+		.def("__call__", get_call<cross_annular_type(const nb::xarray_view<float>&)>(), nb::arg("u"), cross_annular_call1_doc)
+		.def("__call__", get_call<cross_annular_type(const nb::xarray_view<double>&)>(), nb::arg("u"), cross_annular_call1_doc)
+		.def("__call__", get_call<cross_annular_type(const nb::xarray_view<long double>&)>(), nb::arg("u"), cross_annular_call1_doc)
+		.def("__call__", get_call<cross_annular_type(const nb::xtensor_view<float, 1>&, const nb::xtensor_view<float, 1>&)>(), nb::arg("ux"), nb::arg("uy"), cross_annular_call2_doc)
+		.def("__call__", get_call<cross_annular_type(const nb::xtensor_view<double, 1>&, const nb::xtensor_view<double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), cross_annular_call2_doc)
+		.def("__call__", get_call<cross_annular_type(const nb::xtensor_view<long double, 1>&, const nb::xtensor_view<long double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), cross_annular_call2_doc);
 
 	using point_type = af::point<value_type>;
 	nb::class_<point_type>(m, "Point", point_doc)
 		.def(nb::init<>(), point_init_doc)
-		.def("__call__", get_call<value_type, point_type(value_type)>(), nb::arg("u"), point_call1_doc)
-		.def("__call__", get_call<value_type, point_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), point_call2_doc);
+		.def("__call__", get_call<point_type(value_type)>(), nb::arg("u"), point_call1_doc)
+		.def("__call__", get_call<point_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), point_call2_doc)
+		.def("__call__", get_call<point_type(const nb::xarray_view<float>&)>(), nb::arg("u"), point_call1_doc)
+		.def("__call__", get_call<point_type(const nb::xarray_view<double>&)>(), nb::arg("u"), point_call1_doc)
+		.def("__call__", get_call<point_type(const nb::xarray_view<long double>&)>(), nb::arg("u"), point_call1_doc)
+		.def("__call__", get_call<point_type(const nb::xtensor_view<float, 1>&, const nb::xtensor_view<float, 1>&)>(), nb::arg("ux"), nb::arg("uy"), point_call2_doc)
+		.def("__call__", get_call<point_type(const nb::xtensor_view<double, 1>&, const nb::xtensor_view<double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), point_call2_doc)
+		.def("__call__", get_call<point_type(const nb::xtensor_view<long double, 1>&, const nb::xtensor_view<long double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), point_call2_doc);
 
 	using square_type = af::square<value_type>;
 	nb::class_<square_type>(m, "Square", square_doc)
 		.def(nb::init<>(), square_init_doc)
-		.def("__call__", get_call<value_type, square_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), square_call_doc);
+		.def("__call__", get_call<square_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), square_call_doc)
+		.def("__call__", get_call<square_type(const nb::xtensor_view<float, 1>&, const nb::xtensor_view<float, 1>&)>(), nb::arg("ux"), nb::arg("uy"), square_call_doc)
+		.def("__call__", get_call<square_type(const nb::xtensor_view<double, 1>&, const nb::xtensor_view<double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), square_call_doc)
+		.def("__call__", get_call<square_type(const nb::xtensor_view<long double, 1>&, const nb::xtensor_view<long double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), square_call_doc);
 }

@@ -6,6 +6,7 @@
  */
 
 #include <nanobind/nanobind.h>
+#include <nanobind/xtensor.h>
 #include <nanobind/stl/function.h>
 #include <nanobind/stl/variant.h>
 
@@ -152,6 +153,43 @@ See Also
 :external+libweif:cpp:func:`weif::weight_function_2d::operator()` : Base function in C++ library.
 )";
 
+constexpr const char* weight_function_grid_2d_doc = R"(
+Scintillation weight function grid for non axially symmetric power spectra.
+
+Computes the scintillation weight function on a two‑dimensional altitude grid.
+)";
+
+constexpr const char* weight_function_grid_2d_init_doc = R"(
+Construct weight function grid.
+
+Parameters
+----------
+spectral_filter : SpectralFilter
+    Spectral filter function (e.g., Mono, Gauss, Poly).
+wavelength : float
+    Wavelength in nanometers.
+aperture_filter : ApertureFilter2d
+    2D aperture filter function (e.g., Circular, Annular, CrossAnnular, Point, Square).
+aperture_scale : float
+    Aperture scale in millimeters.
+shape : tuple[int, int]
+    Grid dimensions (Nx, Ny) for precomputation.
+)";
+
+constexpr const char* weight_function_grid_2d_call_doc = R"(
+Evaluate scintillation weight function at specific altitude.
+
+Parameters
+----------
+altitude : float
+    Atmospheric altitude in kilometers.
+
+Returns
+-------
+float
+    Weight value representing thin layer contribution to scintillation.
+)";
+
 
 template<class F> struct get_call_helper;
 template<class T, class... Args> struct get_call_helper<T(Args...)> {
@@ -162,7 +200,7 @@ template<class T, class... Args> struct get_call_helper<T(Args...)> {
 	};
 };
 
-template<class, class F>
+template<class F>
 constexpr auto get_call() noexcept {
 	return get_call_helper<F>::get_call();
 }
@@ -179,19 +217,39 @@ void init_weight_function(nb::module_& m) {
 		.def(nb::init<py_sf<value_type>, value_type, py_af<value_type>, value_type, std::size_t>(),
 			nb::arg("spectral_filter"), nb::arg("wavelength"), nb::arg("aperture_filter"), nb::arg("aperture_scale"), nb::arg("size"),
 			weight_function_init_doc)
-		.def("__call__", get_call<value_type, weight_function_type(value_type)>(), nb::arg("altitude"), weight_function_call_doc);
+		.def("__call__", get_call<weight_function_type(value_type)>(), nb::arg("altitude"), weight_function_call_doc)
+		.def("__call__", get_call<weight_function_type(const nb::xarray_view<float>&)>(), nb::arg("altitude"), weight_function_call_doc)
+		.def("__call__", get_call<weight_function_type(const nb::xarray_view<double>&)>(), nb::arg("altitude"), weight_function_call_doc)
+		.def("__call__", get_call<weight_function_type(const nb::xarray_view<long double>&)>(), nb::arg("altitude"), weight_function_call_doc)
+		.def("__call__", get_call<weight_function_type(const nb::xtensor_view<float, 1>&)>(), nb::arg("altitude"), weight_function_call_doc)
+		.def("__call__", get_call<weight_function_type(const nb::xtensor_view<double, 1>&)>(), nb::arg("altitude"), weight_function_call_doc)
+		.def("__call__", get_call<weight_function_type(const nb::xtensor_view<long double, 1>&)>(), nb::arg("altitude"), weight_function_call_doc);
 
 	using weight_function_2d_type = weif::weight_function_2d<value_type>;
 	nb::class_<weight_function_2d_type>(m, "WeightFunction2d", weight_function_2d_doc)
 		.def(nb::init<py_sf<value_type>, value_type, py_af_2d<value_type>, value_type, std::size_t>(),
 			nb::arg("spectral_filter"), nb::arg("wavelength"), nb::arg("aperture_filter"), nb::arg("aperture_scale"), nb::arg("size"),
 			weight_function_2d_init_doc)
-		.def("__call__", get_call<value_type, weight_function_2d_type(value_type)>(), nb::arg("altitude"), weight_function_2d_call_doc);
+		.def("__call__", get_call<weight_function_2d_type(value_type)>(), nb::arg("altitude"), weight_function_2d_call_doc)
+		.def("__call__", get_call<weight_function_2d_type(const nb::xarray_view<float>&)>(), nb::arg("altitude"), weight_function_2d_call_doc)
+		.def("__call__", get_call<weight_function_2d_type(const nb::xarray_view<double>&)>(), nb::arg("altitude"), weight_function_2d_call_doc)
+		.def("__call__", get_call<weight_function_2d_type(const nb::xarray_view<long double>&)>(), nb::arg("altitude"), weight_function_2d_call_doc)
+		.def("__call__", get_call<weight_function_2d_type(const nb::xtensor_view<float, 1>&)>(), nb::arg("altitude"), weight_function_2d_call_doc)
+		.def("__call__", get_call<weight_function_2d_type(const nb::xtensor_view<double, 1>&)>(), nb::arg("altitude"), weight_function_2d_call_doc)
+		.def("__call__", get_call<weight_function_2d_type(const nb::xtensor_view<long double, 1>&)>(), nb::arg("altitude"), weight_function_2d_call_doc);
 
 #if 0
 	using weight_function_grid_2d_type = weif::weight_function_grid_2d<value_type>;
-	nb::class_<weight_function_grid_2d_type>(m, "WeightFunctionGrid2d")
-//		.def(nb::init<py_spectral_filter, value_type, py_aperture_filter, value_type, weight_function_grid_2d_type::shape_type>());
+	nb::class_<weight_function_grid_2d_type>(m, "WeightFunctionGrid2d", weight_function_grid_2d_doc)
+		.def(nb::init<py_sf<value_type>, value_type, py_af_2d<value_type>, value_type, weight_function_grid_2d_type::shape_type>(),
+			nb::arg("spectral_filter"), nb::arg("wavelength"), nb::arg("aperture_filter"), nb::arg("aperture_scale"), nb::arg("shape"),
+			weight_function_grid_2d_init_doc)
+		.def("__call__", get_call<weight_function_grid_2d_type(value_type)>(), nb::arg("altitude"), weight_function_grid_2d_call_doc)
+		.def("__call__", get_call<weight_function_grid_2d_type(const nb::xarray_view<float>&)>(), nb::arg("altitude"), weight_function_grid_2d_call_doc)
+		.def("__call__", get_call<weight_function_grid_2d_type(const nb::xarray_view<double>&)>(), nb::arg("altitude"), weight_function_grid_2d_call_doc)
+		.def("__call__", get_call<weight_function_grid_2d_type(const nb::xarray_view<long double>&)>(), nb::arg("altitude"), weight_function_grid_2d_call_doc)
+		.def("__call__", get_call<weight_function_grid_2d_type(const nb::xtensor_view<float, 1>&)>(), nb::arg("altitude"), weight_function_grid_2d_call_doc)
+		.def("__call__", get_call<weight_function_grid_2d_type(const nb::xtensor_view<double, 1>&)>(), nb::arg("altitude"), weight_function_grid_2d_call_doc)
+		.def("__call__", get_call<weight_function_grid_2d_type(const nb::xtensor_view<long double, 1>&)>(), nb::arg("altitude"), weight_function_grid_2d_call_doc);
 #endif
-
 }
