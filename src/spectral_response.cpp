@@ -10,6 +10,8 @@
 #include <nanobind/nanobind.h>
 #include <nanobind/typing.h>
 #include <nanobind/stl/string.h>
+#include <nanobind/xtensor.h>
+
 
 #include <weif/spectral_response.h>
 
@@ -180,6 +182,21 @@ See Also
 :external+libweif:cpp:func:`weif::spectral_response::effective_lambda` : Base function in C++ library.
 )";
 
+constexpr const char* spectral_response_data_doc = R"(
+Returns the spectral response curve data.
+
+The data is a 1‑D array of response values corresponding to the wavelength grid.
+
+Returns
+-------
+ndarray
+    One‑dimensional array of response values (same length as the wavelength grid).
+
+See Also
+--------
+:external+libweif:cpp:func:`weif::spectral_response::data` : Base method in C++ library.
+)";
+
 
 void init_spectral_response(nb::module_& m) {
 	/* Python floating point number is the double. So, let value_type = double.
@@ -198,9 +215,14 @@ void init_spectral_response(nb::module_& m) {
 
 			new (s) spectral_response_type{spectral_response_type::stack_from_files(std::cbegin(filenames), std::cend(filenames))};
 		}, nb::arg("iter"), spectral_response_init_iter_doc)
+		.def("__init__", [] (spectral_response_type* s, const xt::xtensor<value_type, 1>& data, value_type origin, value_type delta) {
+			new (s) spectral_response_type{weif::uniform_grid{origin, delta, data.size()}, data};
+		}, nb::arg("data"), nb::kw_only(), nb::arg("origin"), nb::arg("delta"))
 		.def("normalize", &spectral_response_type::normalize, spectral_response_normalize_doc)
 		.def("normalized", &spectral_response_type::normalized, spectral_response_normalized_doc)
 		.def("stack", &spectral_response_type::stack, nb::arg("other"), spectral_response_stack_doc)
 		.def("stacked", &spectral_response_type::stacked, nb::arg("other"), spectral_response_stacked_doc)
-		.def("effective_lambda", &spectral_response_type::effective_lambda, spectral_response_effective_lambda_doc);
+		.def("effective_lambda", &spectral_response_type::effective_lambda, spectral_response_effective_lambda_doc)
+		.def("grid", [] (spectral_response_type& self) noexcept { return self.grid().values(); })
+		.def("data", &spectral_response_type::data, spectral_response_data_doc);
 }

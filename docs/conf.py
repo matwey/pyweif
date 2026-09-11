@@ -18,6 +18,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
     'sphinx.ext.intersphinx',
+    'nbsphinx',
 ]
 
 templates_path = ['_templates']
@@ -36,3 +37,5 @@ intersphinx_mapping = {
 }
 
 intersphinx_disabled_reftypes = ["*"]
+
+nbsphinx_execute = 'never'
