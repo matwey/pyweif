@@ -6,16 +6,16 @@ import pyweif
 
 
 class Mono:
-    r"""
+    """
     Monochromatic spectral filter.
 
     The monochromatic spectral filter is defined as:
 
     .. math::
 
-         E(x) = \sin^2(\pi x),
+         E(x) = \\sin^2(\\pi x),
 
-    where :math:`x \equiv z f^2 = \frac{u^2}{\lambda}`.
+    where :math:`x \\equiv z f^2 = \\frac{u^2}{\\lambda}`.
 
     See Also
     --------
@@ -26,19 +26,19 @@ class Mono:
         """Constructs a monochromatic spectral filter."""
 
     def __call__(self, x: float) -> float:
-        r"""
+        """
         Call operator for monochromatic spectral filter.
 
         Evaluates the filter function for a given argument:
 
         .. math::
 
-             E(x) = \sin^2(\pi x).
+             E(x) = \\sin^2(\\pi x).
 
         Parameters
         ----------
         x : float
-            Normalized squared frequency :math:`x = z f^2 = \frac{u^2}{\lambda}`.
+            Normalized squared frequency :math:`x = z f^2 = \\frac{u^2}{\\lambda}`.
 
         Returns
         -------
@@ -51,7 +51,7 @@ class Mono:
         """
 
     def regular(self, x: float) -> float:
-        r"""
+        """
         Evaluate regularized monochromatic spectral filter.
 
         Evaluates :math:`x^2 E(x)`.
@@ -59,7 +59,7 @@ class Mono:
         Parameters
         ----------
         x : float
-            Normalized squared frequency :math:`x = z f^2 = \frac{u^2}{\lambda}`.
+            Normalized squared frequency :math:`x = z f^2 = \\frac{u^2}{\\lambda}`.
 
         Returns
         -------
@@ -72,18 +72,18 @@ class Mono:
         """
 
 class Gauss:
-    r"""
+    """
     Gaussian spectral filter.
 
     The filter combines monochromatic oscillations with Gaussian damping:
 
     .. math::
 
-         E(x) = \sin^2(\pi x) \cdot \exp\left(-\frac{\pi^2}{8\ln 2} (x \Lambda)^2\right),
+         E(x) = \\sin^2(\\pi x) \\cdot \\exp\\left(-\\frac{\\pi^2}{8\\ln 2} (x \\Lambda)^2\\right),
 
     where:
-    - :math:`x \equiv z f^2 = \frac{u^2}{\lambda}`,
-    - :math:`\Lambda` is the full width at half maximum of the Gaussian envelope expressed in relative units.
+    - :math:`x \\equiv z f^2 = \\frac{u^2}{\\lambda}`,
+    - :math:`\\Lambda` is the full width at half maximum of the Gaussian envelope expressed in relative units.
 
     Reference: Tokovinin (2003) "Polychromatic scintillation", https://doi.org/10.1364/JOSAA.20.000686
 
@@ -93,29 +93,29 @@ class Gauss:
     """
 
     def __init__(self, fwhm: float) -> None:
-        r"""
+        """
         Construct a Gaussian spectral filter.
 
         Parameters
         ----------
         fwhm : float
-            Full width at half maximum :math:`\Lambda` of the Gaussian envelope expressed in relative units.
+            Full width at half maximum :math:`\\Lambda` of the Gaussian envelope expressed in relative units.
         """
 
     def __call__(self, x: float) -> float:
-        r"""
+        """
         Call operator for Gaussian spectral filter.
 
         Evaluates the filter function for a given argument:
 
         .. math::
 
-             E(x) = \sin^2(\pi x) \cdot \exp\left(-\frac{\pi^2}{8\ln 2} (x \Lambda)^2\right).
+             E(x) = \\sin^2(\\pi x) \\cdot \\exp\\left(-\\frac{\\pi^2}{8\\ln 2} (x \\Lambda)^2\\right).
 
         Parameters
         ----------
         x : float
-            Normalized squared frequency :math:`x = z f^2 = \frac{u^2}{\lambda}`.
+            Normalized squared frequency :math:`x = z f^2 = \\frac{u^2}{\\lambda}`.
 
         Returns
         -------
@@ -128,7 +128,7 @@ class Gauss:
         """
 
     def regular(self, x: float) -> float:
-        r"""
+        """
         Evaluate regularized Gaussian spectral filter.
 
         Evaluates :math:`x^2 E(x)`.
@@ -136,7 +136,7 @@ class Gauss:
         Parameters
         ----------
         x : float
-            Normalized squared frequency :math:`x = z f^2 = \frac{u^2}{\lambda}`.
+            Normalized squared frequency :math:`x = z f^2 = \\frac{u^2}{\\lambda}`.
 
         Returns
         -------
@@ -206,7 +206,7 @@ class Poly:
         """
 
     def __call__(self, x: float) -> float:
-        r"""
+        """
         Call operator for polychromatic spectral filter.
 
         Evaluates the filter function for a given argument.
@@ -214,7 +214,7 @@ class Poly:
         Parameters
         ----------
         x : float
-            Normalized squared frequency :math:`x = z f^2 = \frac{u^2}{\lambda}`.
+            Normalized squared frequency :math:`x = z f^2 = \\frac{u^2}{\\lambda}`.
 
         Returns
         -------
@@ -227,7 +227,7 @@ class Poly:
         """
 
     def regular(self, x: float) -> float:
-        r"""
+        """
         Evaluate regularized polychromatic spectral filter.
 
         Evaluates :math:`x^2 E(x)`.
@@ -235,7 +235,7 @@ class Poly:
         Parameters
         ----------
         x : float
-            Normalized squared frequency :math:`x = z f^2 = \frac{u^2}{\lambda}`.
+            Normalized squared frequency :math:`x = z f^2 = \\frac{u^2}{\\lambda}`.
 
         Returns
         -------

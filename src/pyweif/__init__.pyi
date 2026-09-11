@@ -1,7 +1,7 @@
 from collections.abc import Callable, Iterable
 from typing import overload
 
-from . import af as af, df as df, sf as sf
+from pyweif import af as af, df as df, sf as sf
 
 
 class SpectralResponse:
@@ -74,14 +74,14 @@ class SpectralResponse:
         """
 
     def normalize(self) -> SpectralResponse:
-        r"""
+        """
         Normalizes the spectral response in‑place.
 
         Scales the data so that the total response equals 1:
 
         .. math::
 
-             \sum_i F(\lambda_i) = 1.
+             \\sum_i F(\\lambda_i) = 1.
 
         Returns
         -------
@@ -158,14 +158,14 @@ class SpectralResponse:
         """
 
     def effective_lambda(self) -> float:
-        r"""
+        """
         Computes the effective wavelength.
 
         Uses the usual astronomical definition of the effective wavelength:
 
         .. math::
 
-             \lambda_{\mathrm{eff}} = \frac{\int \lambda R(\lambda) d\lambda}{\int R(\lambda) d\lambda}.
+             \\lambda_{\\mathrm{eff}} = \\frac{\\int \\lambda R(\\lambda) d\\lambda}{\\int R(\\lambda) d\\lambda}.
 
         Returns
         -------
@@ -178,16 +178,16 @@ class SpectralResponse:
         """
 
 class WeightFunction:
-    r"""
+    """
     Scintillation weight function for axially symmetric power spectra.
 
     Computes the scintillation weight function for axially symmetric power spectra:
 
     .. math::
 
-         W(z) = 9.69 \cdot 10^{-3} \cdot 32 \pi^3 z^{5/6} \lambda^{-7/6} \int_0^{\infty} du u^{-8/3} S(u) A\left(\frac{D}{\sqrt{\lambda z}} u\right),
+         W(z) = 9.69 \\cdot 10^{-3} \\cdot 32 \\pi^3 z^{5/6} \\lambda^{-7/6} \\int_0^{\\infty} du u^{-8/3} S(u) A\\left(\\frac{D}{\\sqrt{\\lambda z}} u\\right),
 
-    where :math:`S(u)` is a spectral filter, :math:`\lambda` is its equivalent wavelength, and :math:`A(u)` is an aperture filter.
+    where :math:`S(u)` is a spectral filter, :math:`\\lambda` is its equivalent wavelength, and :math:`A(u)` is an aperture filter.
 
     The library uses consistent units:
     - Altitudes: kilometers (km)
@@ -247,16 +247,16 @@ class WeightFunction:
         """
 
 class WeightFunction2d:
-    r"""
+    """
     Scintillation weight function for non axially symmetric power spectra.
 
     Computes the scintillation weight function for non axially symmetric power spectra:
 
     .. math::
 
-         W(z) = 9.69 \cdot 10^{-3} \cdot 16 \pi^2 z^{5/6} \lambda^{-7/6} \int \mathbf{du} u^{-11/3} S(u) A\left(\frac{D}{\sqrt{\lambda z}} \mathbf{u}\right),
+         W(z) = 9.69 \\cdot 10^{-3} \\cdot 16 \\pi^2 z^{5/6} \\lambda^{-7/6} \\int \\mathbf{du} u^{-11/3} S(u) A\\left(\\frac{D}{\\sqrt{\\lambda z}} \\mathbf{u}\\right),
 
-    where :math:`S(u)` is a spectral filter, :math:`\lambda` is its equivalent wavelength, and :math:`A(\mathbf{u})` is an aperture filter.
+    where :math:`S(u)` is a spectral filter, :math:`\\lambda` is its equivalent wavelength, and :math:`A(\\mathbf{u})` is an aperture filter.
 
     The library uses consistent units:
     - Altitudes: kilometers (km)

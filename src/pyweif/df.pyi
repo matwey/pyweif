@@ -4,15 +4,15 @@ from collections.abc import Callable, Sequence
 
 
 class DigitalFilter2d:
-    r"""
+    """
     Digital filter function.
 
     Implements a two‑dimensional digital filter defined by its impulse response.
-    The filter can be constructed either from a function :math:`\Omega(u_x, u_y)` evaluated on
+    The filter can be constructed either from a function :math:`\\Omega(u_x, u_y)` evaluated on
     a frequency grid, or directly from an impulse response tensor.
 
-    The digital filter function :math:`\Omega(u_x, u_y)` is evaluated on an appropriate frequency
-    grid spanning :math:`[0, 0.5] \times [0, 0.5]` in dimensionless frequency space, and the
+    The digital filter function :math:`\\Omega(u_x, u_y)` is evaluated on an appropriate frequency
+    grid spanning :math:`[0, 0.5] \\times [0, 0.5]` in dimensionless frequency space, and the
     filter impulse response is calculated using Fast Fourier Transform.
 
     See Also
@@ -21,13 +21,13 @@ class DigitalFilter2d:
     """
 
     def __init__(self, fun: Callable[[float, float], float], shape: Sequence[int]) -> None:
-        r"""
+        """
         Construct digital filter from a function.
 
         Parameters
         ----------
         fun : Callable[[float, float], float]
-            Digital filter function :math:`\Omega(u_x, u_y)` that returns the filter response
+            Digital filter function :math:`\\Omega(u_x, u_y)` that returns the filter response
             for given dimensionless frequency coordinates.
         shape : tuple[int, int]
             Filter dimensions (Nx, Ny). The impulse response will be computed
