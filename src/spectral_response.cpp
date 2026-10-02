@@ -31,22 +31,32 @@ See Also
 :external+libweif:cpp:class:`weif::sf::poly` : Polychromatic spectral filter.
 )";
 
-constexpr const char* spectral_response_init_file_doc = R"(
-Construct spectral response from a file.
+constexpr const char* spectral_response_init_doc = R"(
+Constructs a spectral response.
 
-Loads wavelength and response values from a space‑separated text file.
+The spectral response is constructed either from a single data file or by
+stacking (multiplying) several response curves from a sequence of files.
+
+The single-file form loads wavelength and response values from a
+space-separated text file. The iterable form loads each file sequentially
+and stacks (multiplies) the responses together.
 
 Parameters
 ----------
 filename : str
     Path to the data file.
+    Used when calling with a single argument.
+iter : Iterable[str]
+    Iterable of file paths. Each file must satisfy the format described
+    in the File Format Requirements below.
+    Used when calling with an iterable of filenames.
 
 File Format Requirements
------------------------
-- Space‑separated values (no multiple spaces are allowed as delimiter)
-- No header row
-- First column: Wavelength values (in nanometers, increasing order)
-- Second column: Corresponding spectral response values
+------------------------
+- Space-separated values (no multiple spaces are allowed as delimiter).
+- No header row.
+- First column: Wavelength values (in nanometers, increasing order).
+- Second column: Corresponding spectral response values.
 
 Example valid file content::
 
@@ -58,31 +68,11 @@ Example valid file content::
 See Also
 --------
 :external+libweif:cpp:func:`weif::spectral_response::make_from_file` : Base function in C++ library.
-)";
-
-constexpr const char* spectral_response_init_iter_doc = R"(
-Construct spectral response by stacking multiple files.
-
-Creates a spectral response by loading and stacking (multiplying)
-several response curves from a sequence of filenames.
-
-Parameters
-----------
-iter : Iterable[str]
-    Iterable of file paths. Each file must satisfy the format
-    described in the single‑file constructor.
-
-The stacking is performed sequentially: the first file defines the
-initial response, and each subsequent file is multiplied (stacked)
-with the accumulated result.
-
-See Also
---------
 :external+libweif:cpp:func:`weif::spectral_response::stack_from_files` : Base function in C++ library.
 )";
 
 constexpr const char* spectral_response_normalize_doc = R"(
-Normalizes the spectral response in‑place.
+Normalizes the spectral response in-place.
 
 Scales the data so that the total response equals 1:
 
@@ -117,18 +107,18 @@ See Also
 )";
 
 constexpr const char* spectral_response_stack_doc = R"(
-Performs in‑place spectral response stacking (multiplication).
+Performs in-place spectral response stacking (multiplication).
 
 Multiplies the current response with another spectral response,
 keeping only the wavelength range common to both curves.
 
+Both spectral responses must have compatible wavelength grids:
+sufficient overlapping wavelength range and identical spacing.
+
 Parameters
 ----------
 other : SpectralResponse
-    Another spectral response to stack with current.
-
-Both spectral responses must have compatible wavelength grids:
-sufficient overlapping wavelength range and identical spacing.
+    Another spectral response to stack with the current one.
 
 Raises
 ------
@@ -141,7 +131,7 @@ See Also
 )";
 
 constexpr const char* spectral_response_stacked_doc = R"(
-Creates a stacked response (element‑wise multiplication).
+Creates a stacked response (element-wise multiplication).
 
 Returns a new spectral response that is the result of stacking
 the current response with another one (see :meth:`stack`).
@@ -149,7 +139,7 @@ the current response with another one (see :meth:`stack`).
 Parameters
 ----------
 other : SpectralResponse
-    Response to stack with current.
+    Spectral response to stack with the current one.
 
 Returns
 -------
@@ -191,13 +181,13 @@ void init_spectral_response(nb::module_& m) {
 	nb::class_<spectral_response_type>(m, "SpectralResponse", spectral_response_doc)
 		.def("__init__", [] (spectral_response_type* s, const std::string& filename) {
 			new (s) spectral_response_type{spectral_response_type::make_from_file(filename)};
-		}, nb::arg("filename"), spectral_response_init_file_doc)
+		}, nb::arg("filename"), spectral_response_init_doc)
 		.def("__init__", [] (spectral_response_type* s, nb::typed<nb::iterable, std::string> iter) {
 			const auto filenames = std::ranges::transform_view(iter,
 				[] (nb::handle h) { return nb::cast<std::string>(h); });
 
 			new (s) spectral_response_type{spectral_response_type::stack_from_files(std::cbegin(filenames), std::cend(filenames))};
-		}, nb::arg("iter"), spectral_response_init_iter_doc)
+		}, nb::arg("iter"), spectral_response_init_doc)
 		.def("normalize", &spectral_response_type::normalize, spectral_response_normalize_doc)
 		.def("normalized", &spectral_response_type::normalized, spectral_response_normalized_doc)
 		.def("stack", &spectral_response_type::stack, nb::arg("other"), spectral_response_stack_doc)

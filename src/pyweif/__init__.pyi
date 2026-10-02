@@ -20,23 +20,36 @@ class SpectralResponse:
     """
 
     @overload
-    def __init__(self, filename: str) -> None:
-        """
-        Construct spectral response from a file.
+    def __init__(self, filename: str) -> None: ...
 
-        Loads wavelength and response values from a space‑separated text file.
+    @overload
+    def __init__(self, iter: Iterable[str]) -> None:
+        """
+        Constructs a spectral response.
+
+        The spectral response is constructed either from a single data file or by
+        stacking (multiplying) several response curves from a sequence of files.
+
+        The single-file form loads wavelength and response values from a
+        space-separated text file. The iterable form loads each file sequentially
+        and stacks (multiplies) the responses together.
 
         Parameters
         ----------
         filename : str
             Path to the data file.
+            Used when calling with a single argument.
+        iter : Iterable[str]
+            Iterable of file paths. Each file must satisfy the format described
+            in the File Format Requirements below.
+            Used when calling with an iterable of filenames.
 
         File Format Requirements
-        -----------------------
-        - Space‑separated values (no multiple spaces are allowed as delimiter)
-        - No header row
-        - First column: Wavelength values (in nanometers, increasing order)
-        - Second column: Corresponding spectral response values
+        ------------------------
+        - Space-separated values (no multiple spaces are allowed as delimiter).
+        - No header row.
+        - First column: Wavelength values (in nanometers, increasing order).
+        - Second column: Corresponding spectral response values.
 
         Example valid file content::
 
@@ -48,34 +61,12 @@ class SpectralResponse:
         See Also
         --------
         :external+libweif:cpp:func:`weif::spectral_response::make_from_file` : Base function in C++ library.
-        """
-
-    @overload
-    def __init__(self, iter: Iterable[str]) -> None:
-        """
-        Construct spectral response by stacking multiple files.
-
-        Creates a spectral response by loading and stacking (multiplying)
-        several response curves from a sequence of filenames.
-
-        Parameters
-        ----------
-        iter : Iterable[str]
-            Iterable of file paths. Each file must satisfy the format
-            described in the single‑file constructor.
-
-        The stacking is performed sequentially: the first file defines the
-        initial response, and each subsequent file is multiplied (stacked)
-        with the accumulated result.
-
-        See Also
-        --------
         :external+libweif:cpp:func:`weif::spectral_response::stack_from_files` : Base function in C++ library.
         """
 
     def normalize(self) -> SpectralResponse:
         """
-        Normalizes the spectral response in‑place.
+        Normalizes the spectral response in-place.
 
         Scales the data so that the total response equals 1:
 
@@ -112,18 +103,18 @@ class SpectralResponse:
 
     def stack(self, other: SpectralResponse) -> None:
         """
-        Performs in‑place spectral response stacking (multiplication).
+        Performs in-place spectral response stacking (multiplication).
 
         Multiplies the current response with another spectral response,
         keeping only the wavelength range common to both curves.
 
+        Both spectral responses must have compatible wavelength grids:
+        sufficient overlapping wavelength range and identical spacing.
+
         Parameters
         ----------
         other : SpectralResponse
-            Another spectral response to stack with current.
-
-        Both spectral responses must have compatible wavelength grids:
-        sufficient overlapping wavelength range and identical spacing.
+            Another spectral response to stack with the current one.
 
         Raises
         ------
@@ -137,7 +128,7 @@ class SpectralResponse:
 
     def stacked(self, other: SpectralResponse) -> SpectralResponse:
         """
-        Creates a stacked response (element‑wise multiplication).
+        Creates a stacked response (element-wise multiplication).
 
         Returns a new spectral response that is the result of stacking
         the current response with another one (see :meth:`stack`).
@@ -145,7 +136,7 @@ class SpectralResponse:
         Parameters
         ----------
         other : SpectralResponse
-            Response to stack with current.
+            Spectral response to stack with the current one.
 
         Returns
         -------
