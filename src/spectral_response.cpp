@@ -25,15 +25,6 @@ providing operations for normalization, stacking, and analysis.
 The spectral response is typically used as input for polychromatic
 filter calculations.
 
-See Also
---------
-:external+libweif:cpp:class:`weif::spectral_response` : Base class in C++ library.
-:external+libweif:cpp:class:`weif::sf::poly` : Polychromatic spectral filter.
-)";
-
-constexpr const char* spectral_response_init_doc = R"(
-Constructs a spectral response.
-
 The spectral response is constructed either from a single data file or by
 stacking (multiplying) several response curves from a sequence of files.
 
@@ -48,11 +39,13 @@ filename : str
     Used when calling with a single argument.
 iter : Iterable[str]
     Iterable of file paths. Each file must satisfy the format described
-    in the File Format Requirements below.
+    in the Notes section below.
     Used when calling with an iterable of filenames.
 
-File Format Requirements
-------------------------
+Notes
+-----
+Each file must satisfy the following format requirements:
+
 - Space-separated values (no multiple spaces are allowed as delimiter).
 - No header row.
 - First column: Wavelength values (in nanometers, increasing order).
@@ -67,6 +60,8 @@ Example valid file content::
 
 See Also
 --------
+:external+libweif:cpp:class:`weif::spectral_response` : Base class in C++ library.
+:external+libweif:cpp:class:`weif::sf::poly` : Polychromatic spectral filter.
 :external+libweif:cpp:func:`weif::spectral_response::make_from_file` : Base function in C++ library.
 :external+libweif:cpp:func:`weif::spectral_response::stack_from_files` : Base function in C++ library.
 )";
@@ -181,13 +176,13 @@ void init_spectral_response(nb::module_& m) {
 	nb::class_<spectral_response_type>(m, "SpectralResponse", spectral_response_doc)
 		.def("__init__", [] (spectral_response_type* s, const std::string& filename) {
 			new (s) spectral_response_type{spectral_response_type::make_from_file(filename)};
-		}, nb::arg("filename"), spectral_response_init_doc)
+		}, nb::arg("filename"))
 		.def("__init__", [] (spectral_response_type* s, nb::typed<nb::iterable, std::string> iter) {
 			const auto filenames = std::ranges::transform_view(iter,
 				[] (nb::handle h) { return nb::cast<std::string>(h); });
 
 			new (s) spectral_response_type{spectral_response_type::stack_from_files(std::cbegin(filenames), std::cend(filenames))};
-		}, nb::arg("iter"), spectral_response_init_doc)
+		}, nb::arg("iter"))
 		.def("normalize", &spectral_response_type::normalize, spectral_response_normalize_doc)
 		.def("normalized", &spectral_response_type::normalized, spectral_response_normalized_doc)
 		.def("stack", &spectral_response_type::stack, nb::arg("other"), spectral_response_stack_doc)

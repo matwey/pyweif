@@ -15,28 +15,22 @@ class DigitalFilter2d:
     grid spanning :math:`[0, 0.5] \\times [0, 0.5]` in dimensionless frequency space, and the
     filter impulse response is calculated using Fast Fourier Transform.
 
+    Parameters
+    ----------
+    fun : Callable[[float, float], float]
+        Digital filter function :math:`\\Omega(u_x, u_y)` that returns the filter response
+        for the given dimensionless frequency coordinates.
+    shape : tuple[int, int]
+        Filter dimensions (Nx, Ny). The impulse response will be computed
+        on a grid of this size.
+
     See Also
     --------
     :external+libweif:cpp:class:`weif::digital_filter_2d` : Base class in C++ library.
+    :external+libweif:cpp:func:`weif::digital_filter_2d::digital_filter_2d` : Base constructor in C++ library.
     """
 
-    def __init__(self, fun: Callable[[float, float], float], shape: Sequence[int]) -> None:
-        """
-        Constructs a digital filter from a function.
-
-        Parameters
-        ----------
-        fun : Callable[[float, float], float]
-            Digital filter function :math:`\\Omega(u_x, u_y)` that returns the filter response
-            for the given dimensionless frequency coordinates.
-        shape : tuple[int, int]
-            Filter dimensions (Nx, Ny). The impulse response will be computed
-            on a grid of this size.
-
-        See Also
-        --------
-        :external+libweif:cpp:func:`weif::digital_filter_2d::digital_filter_2d` : Base constructor in C++ library.
-        """
+    def __init__(self, fun: Callable[[float, float], float], shape: Sequence[int]) -> None: ...
 
     def mix(self) -> DigitalFilter2d:
         """

@@ -23,8 +23,7 @@ class Circular:
     :external+libweif:cpp:class:`weif::af::circular` : Base class in C++ library.
     """
 
-    def __init__(self) -> None:
-        """Constructs a circular aperture filter."""
+    def __init__(self) -> None: ...
 
     @overload
     def __call__(self, u: float) -> float: ...
@@ -80,20 +79,17 @@ class Annular:
     (Fourier transform of a unit circular aperture) and :math:`J_1` is the
     Bessel function of the first kind.
 
+    Parameters
+    ----------
+    obscuration : float
+        Central obscuration ratio (:math:`0 \\le \\epsilon < 1`).
+
     See Also
     --------
     :external+libweif:cpp:class:`weif::af::annular` : Base class in C++ library.
     """
 
-    def __init__(self, obscuration: float) -> None:
-        """
-        Constructs an annular aperture filter with the given obscuration.
-
-        Parameters
-        ----------
-        obscuration : float
-            Central obscuration ratio (:math:`0 \\le \\epsilon < 1`).
-        """
+    def __init__(self, obscuration: float) -> None: ...
 
     @overload
     def __call__(self, u: float) -> float: ...
@@ -151,26 +147,23 @@ class CrossAnnular:
     - :math:`\\epsilon_2` is the central obscuration ratio of the second aperture.
     - :math:`\\alpha = D_2/D_1` is the diameter ratio between the apertures.
 
-    Reference: Tokovinin, et al. (2003) "Restoration of turbulence profile from scintillation indices", `<https://doi.org/10.1046/j.1365-8711.2003.06731.x>`_.
+    Parameters
+    ----------
+    ratio : float
+        Diameter ratio :math:`\\alpha = D_2/D_1` between apertures.
+    obscuration_first : float
+        Obscuration ratio :math:`\\epsilon_1` of first aperture (:math:`0 \\le \\epsilon_1 < 1`).
+    obscuration_second : float
+        Obscuration ratio :math:`\\epsilon_2` of second aperture (:math:`0 \\le \\epsilon_2 < 1`).
 
     See Also
     --------
     :external+libweif:cpp:class:`weif::af::cross_annular` : Base class in C++ library.
+
+    Reference: Tokovinin, et al. (2003) "Restoration of turbulence profile from scintillation indices", `<https://doi.org/10.1046/j.1365-8711.2003.06731.x>`_.
     """
 
-    def __init__(self, ratio: float, obscuration_first: float, obscuration_second: float) -> None:
-        """
-        Constructs an aperture filter for covariance of two annular apertures.
-
-        Parameters
-        ----------
-        ratio : float
-            Diameter ratio :math:`\\alpha = D_2/D_1` between apertures.
-        obscuration_first : float
-            Obscuration ratio :math:`\\epsilon_1` of first aperture (:math:`0 \\le \\epsilon_1 < 1`).
-        obscuration_second : float
-            Obscuration ratio :math:`\\epsilon_2` of second aperture (:math:`0 \\le \\epsilon_2 < 1`).
-        """
+    def __init__(self, ratio: float, obscuration_first: float, obscuration_second: float) -> None: ...
 
     @overload
     def __call__(self, u: float) -> float: ...
@@ -228,8 +221,7 @@ class Point:
     :external+libweif:cpp:class:`weif::af::point` : Base class in C++ library.
     """
 
-    def __init__(self) -> None:
-        """Constructs a point aperture filter."""
+    def __init__(self) -> None: ...
 
     @overload
     def __call__(self, u: float) -> float: ...
@@ -286,8 +278,7 @@ class Square:
     :external+libweif:cpp:class:`weif::af::square` : Base class in C++ library.
     """
 
-    def __init__(self) -> None:
-        """Constructs a square aperture filter."""
+    def __init__(self) -> None: ...
 
     def __call__(self, ux: float, uy: float) -> float:
         """

@@ -22,8 +22,7 @@ class Mono:
     :external+libweif:cpp:class:`weif::sf::mono` : Base class in C++ library.
     """
 
-    def __init__(self) -> None:
-        """Constructs a monochromatic spectral filter."""
+    def __init__(self) -> None: ...
 
     def __call__(self, x: float) -> float:
         """
@@ -86,22 +85,19 @@ class Gauss:
     - :math:`x \\equiv z f^2 = \\frac{u^2}{\\lambda}`.
     - :math:`\\Lambda` is the full width at half maximum of the Gaussian envelope expressed in relative units.
 
-    Reference: Tokovinin (2003) "Polychromatic scintillation", `<https://doi.org/10.1364/JOSAA.20.000686>`_.
+    Parameters
+    ----------
+    fwhm : float
+        Full width at half maximum :math:`\\Lambda` of the Gaussian envelope expressed in relative units.
 
     See Also
     --------
     :external+libweif:cpp:class:`weif::sf::gauss` : Base class in C++ library.
+
+    Reference: Tokovinin (2003) "Polychromatic scintillation", `<https://doi.org/10.1364/JOSAA.20.000686>`_.
     """
 
-    def __init__(self, fwhm: float) -> None:
-        """
-        Constructs a Gaussian spectral filter.
-
-        Parameters
-        ----------
-        fwhm : float
-            Full width at half maximum :math:`\\Lambda` of the Gaussian envelope expressed in relative units.
-        """
+    def __init__(self, fwhm: float) -> None: ...
 
     def __call__(self, x: float) -> float:
         """
@@ -160,6 +156,19 @@ class Poly:
     response, ensuring smooth Fourier transform results and improved numerical
     accuracy. The equivalent wavelength is also evaluated during this process.
 
+    The filter is constructed from a spectral response, either with the default
+    carrier wavelength or with a specified carrier wavelength.
+
+    Parameters
+    ----------
+    response : SpectralResponse
+        Input spectral response.
+    size : int
+        Interpolation grid size.
+    carrier : float
+        Carrier wavelength.
+        Used when calling with a specified carrier wavelength.
+
     Notes
     -----
     Before using the filter, it must be normalized. Example usage:
@@ -170,34 +179,18 @@ class Poly:
         equiv_lambda = spectral_filter.equiv_lambda()  # store the wavelength value for later use
         spectral_filter.normalize()  # spectral_filter is now ready for use
 
-    Reference: Tokovinin (2003) "Polychromatic scintillation", `<https://doi.org/10.1364/JOSAA.20.000686>`_.
-
     See Also
     --------
     :external+libweif:cpp:class:`weif::sf::poly` : Base class in C++ library.
+
+    Reference: Tokovinin (2003) "Polychromatic scintillation", `<https://doi.org/10.1364/JOSAA.20.000686>`_.
     """
 
     @overload
     def __init__(self, response: pyweif.SpectralResponse, size: int) -> None: ...
 
     @overload
-    def __init__(self, response: pyweif.SpectralResponse, size: int, carrier: float) -> None:
-        """
-        Constructs a polychromatic spectral filter.
-
-        The filter is constructed from a spectral response, either with the default
-        carrier wavelength or with a specified carrier wavelength.
-
-        Parameters
-        ----------
-        response : SpectralResponse
-            Input spectral response.
-        size : int
-            Interpolation grid size.
-        carrier : float
-            Carrier wavelength.
-            Used when calling with a specified carrier wavelength.
-        """
+    def __init__(self, response: pyweif.SpectralResponse, size: int, carrier: float) -> None: ...
 
     def __call__(self, x: float) -> float:
         """

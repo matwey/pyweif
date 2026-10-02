@@ -13,56 +13,52 @@ class SpectralResponse:
     The spectral response is typically used as input for polychromatic
     filter calculations.
 
+    The spectral response is constructed either from a single data file or by
+    stacking (multiplying) several response curves from a sequence of files.
+
+    The single-file form loads wavelength and response values from a
+    space-separated text file. The iterable form loads each file sequentially
+    and stacks (multiplies) the responses together.
+
+    Parameters
+    ----------
+    filename : str
+        Path to the data file.
+        Used when calling with a single argument.
+    iter : Iterable[str]
+        Iterable of file paths. Each file must satisfy the format described
+        in the Notes section below.
+        Used when calling with an iterable of filenames.
+
+    Notes
+    -----
+    Each file must satisfy the following format requirements:
+
+    - Space-separated values (no multiple spaces are allowed as delimiter).
+    - No header row.
+    - First column: Wavelength values (in nanometers, increasing order).
+    - Second column: Corresponding spectral response values.
+
+    Example valid file content::
+
+        400.0 0.15
+        410.0 0.25
+        ...
+        700.0 0.05
+
     See Also
     --------
     :external+libweif:cpp:class:`weif::spectral_response` : Base class in C++ library.
     :external+libweif:cpp:class:`weif::sf::poly` : Polychromatic spectral filter.
+    :external+libweif:cpp:func:`weif::spectral_response::make_from_file` : Base function in C++ library.
+    :external+libweif:cpp:func:`weif::spectral_response::stack_from_files` : Base function in C++ library.
     """
 
     @overload
     def __init__(self, filename: str) -> None: ...
 
     @overload
-    def __init__(self, iter: Iterable[str]) -> None:
-        """
-        Constructs a spectral response.
-
-        The spectral response is constructed either from a single data file or by
-        stacking (multiplying) several response curves from a sequence of files.
-
-        The single-file form loads wavelength and response values from a
-        space-separated text file. The iterable form loads each file sequentially
-        and stacks (multiplies) the responses together.
-
-        Parameters
-        ----------
-        filename : str
-            Path to the data file.
-            Used when calling with a single argument.
-        iter : Iterable[str]
-            Iterable of file paths. Each file must satisfy the format described
-            in the File Format Requirements below.
-            Used when calling with an iterable of filenames.
-
-        File Format Requirements
-        ------------------------
-        - Space-separated values (no multiple spaces are allowed as delimiter).
-        - No header row.
-        - First column: Wavelength values (in nanometers, increasing order).
-        - Second column: Corresponding spectral response values.
-
-        Example valid file content::
-
-            400.0 0.15
-            410.0 0.25
-            ...
-            700.0 0.05
-
-        See Also
-        --------
-        :external+libweif:cpp:func:`weif::spectral_response::make_from_file` : Base function in C++ library.
-        :external+libweif:cpp:func:`weif::spectral_response::stack_from_files` : Base function in C++ library.
-        """
+    def __init__(self, iter: Iterable[str]) -> None: ...
 
     def normalize(self) -> SpectralResponse:
         """
@@ -186,38 +182,32 @@ class WeightFunction:
     - Wavelengths: nanometers (nm).
     - Geometric scales: millimeters (mm).
 
+    The weight function is precomputed on a grid of `size` nodes using
+    a numerical integration technique and subsequent interpolation is used
+    when the weight_function::operator()() is invoked.
+
+    Parameters
+    ----------
+    spectral_filter : SpectralFilter
+        Spectral filter function (e.g., Mono, Gauss, Poly).
+    wavelength : float
+        Wavelength in nanometers.
+    aperture_filter : ApertureFilter
+        Aperture filter function (e.g., Circular, Annular, CrossAnnular, Point, Square).
+    aperture_scale : float
+        Aperture scale in millimeters.
+    size : int
+        Number of grid points for precomputation.
+
     See Also
     --------
     :external+libweif:cpp:class:`weif::weight_function` : Base class in C++ library.
     :external+libweif:cpp:func:`weif::sf::poly::equiv_lambda` : Compute equivalent wavelength for polychromatic filters.
     :external+libweif:cpp:member:`weif::math::Kolmogorov_Cn2_scale` : Kolmogorov turbulence scaling.
+    :external+libweif:cpp:func:`weif::weight_function::weight_function` : Base constructor in C++ library.
     """
 
-    def __init__(self, spectral_filter: Callable[[float], float], wavelength: float, aperture_filter: Callable[[float], float], aperture_scale: float, size: int) -> None:
-        """
-        Constructs a weight function.
-
-        The weight function is precomputed on a grid of `size` nodes using
-        a numerical integration technique and subsequent interpolation is used
-        when the weight_function::operator()() is invoked.
-
-        Parameters
-        ----------
-        spectral_filter : SpectralFilter
-            Spectral filter function (e.g., Mono, Gauss, Poly).
-        wavelength : float
-            Wavelength in nanometers.
-        aperture_filter : ApertureFilter
-            Aperture filter function (e.g., Circular, Annular, CrossAnnular, Point, Square).
-        aperture_scale : float
-            Aperture scale in millimeters.
-        size : int
-            Number of grid points for precomputation.
-
-        See Also
-        --------
-        :external+libweif:cpp:func:`weif::weight_function::weight_function` : Base constructor in C++ library.
-        """
+    def __init__(self, spectral_filter: Callable[[float], float], wavelength: float, aperture_filter: Callable[[float], float], aperture_scale: float, size: int) -> None: ...
 
     def __call__(self, altitude: float) -> float:
         """
@@ -256,38 +246,32 @@ class WeightFunction2d:
     - Wavelengths: nanometers (nm).
     - Geometric scales: millimeters (mm).
 
+    The weight function is precomputed on a grid of `size` nodes using
+    a numerical integration technique and subsequent interpolation is used
+    when the weight_function_2d::operator()() is invoked.
+
+    Parameters
+    ----------
+    spectral_filter : SpectralFilter
+        Spectral filter function (e.g., Mono, Gauss, Poly).
+    wavelength : float
+        Wavelength in nanometers.
+    aperture_filter : ApertureFilter2d
+        2D aperture filter function (e.g., Circular, Annular, CrossAnnular, Point, Square).
+    aperture_scale : float
+        Aperture scale in millimeters.
+    size : int
+        Number of grid points for precomputation.
+
     See Also
     --------
     :external+libweif:cpp:class:`weif::weight_function_2d` : Base class in C++ library.
     :external+libweif:cpp:func:`weif::sf::poly::equiv_lambda` : Compute equivalent wavelength for polychromatic filters.
     :external+libweif:cpp:member:`weif::math::Kolmogorov_Cn2_scale` : Kolmogorov turbulence scaling.
+    :external+libweif:cpp:func:`weif::weight_function_2d::weight_function_2d` : Base constructor in C++ library.
     """
 
-    def __init__(self, spectral_filter: Callable[[float], float], wavelength: float, aperture_filter: Callable[[float, float], float], aperture_scale: float, size: int) -> None:
-        """
-        Constructs a 2D weight function.
-
-        The weight function is precomputed on a grid of `size` nodes using
-        a numerical integration technique and subsequent interpolation is used
-        when the weight_function_2d::operator()() is invoked.
-
-        Parameters
-        ----------
-        spectral_filter : SpectralFilter
-            Spectral filter function (e.g., Mono, Gauss, Poly).
-        wavelength : float
-            Wavelength in nanometers.
-        aperture_filter : ApertureFilter2d
-            2D aperture filter function (e.g., Circular, Annular, CrossAnnular, Point, Square).
-        aperture_scale : float
-            Aperture scale in millimeters.
-        size : int
-            Number of grid points for precomputation.
-
-        See Also
-        --------
-        :external+libweif:cpp:func:`weif::weight_function_2d::weight_function_2d` : Base constructor in C++ library.
-        """
+    def __init__(self, spectral_filter: Callable[[float], float], wavelength: float, aperture_filter: Callable[[float, float], float], aperture_scale: float, size: int) -> None: ...
 
     def __call__(self, altitude: float) -> float:
         """

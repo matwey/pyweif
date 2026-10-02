@@ -31,10 +31,6 @@ See Also
 :external+libweif:cpp:class:`weif::sf::mono` : Base class in C++ library.
 )";
 
-constexpr const char* mono_init_doc = R"(
-Constructs a monochromatic spectral filter.
-)";
-
 constexpr const char* mono_call_doc = R"(
 Call operator for monochromatic spectral filter.
 
@@ -93,20 +89,16 @@ where:
 - :math:`x \equiv z f^2 = \frac{u^2}{\lambda}`.
 - :math:`\Lambda` is the full width at half maximum of the Gaussian envelope expressed in relative units.
 
-Reference: Tokovinin (2003) "Polychromatic scintillation", `<https://doi.org/10.1364/JOSAA.20.000686>`_.
-
-See Also
---------
-:external+libweif:cpp:class:`weif::sf::gauss` : Base class in C++ library.
-)";
-
-constexpr const char* gauss_init_doc = R"(
-Constructs a Gaussian spectral filter.
-
 Parameters
 ----------
 fwhm : float
     Full width at half maximum :math:`\Lambda` of the Gaussian envelope expressed in relative units.
+
+See Also
+--------
+:external+libweif:cpp:class:`weif::sf::gauss` : Base class in C++ library.
+
+Reference: Tokovinin (2003) "Polychromatic scintillation", `<https://doi.org/10.1364/JOSAA.20.000686>`_.
 )";
 
 constexpr const char* gauss_call_doc = R"(
@@ -163,26 +155,6 @@ by using the carrier wavelength as the new origin point for the spectral
 response, ensuring smooth Fourier transform results and improved numerical
 accuracy. The equivalent wavelength is also evaluated during this process.
 
-Notes
------
-Before using the filter, it must be normalized. Example usage:
-
-.. code-block:: python
-
-    spectral_filter = Poly(response, 4096)
-    equiv_lambda = spectral_filter.equiv_lambda()  # store the wavelength value for later use
-    spectral_filter.normalize()  # spectral_filter is now ready for use
-
-Reference: Tokovinin (2003) "Polychromatic scintillation", `<https://doi.org/10.1364/JOSAA.20.000686>`_.
-
-See Also
---------
-:external+libweif:cpp:class:`weif::sf::poly` : Base class in C++ library.
-)";
-
-constexpr const char* poly_init_doc = R"(
-Constructs a polychromatic spectral filter.
-
 The filter is constructed from a spectral response, either with the default
 carrier wavelength or with a specified carrier wavelength.
 
@@ -195,6 +167,22 @@ size : int
 carrier : float
     Carrier wavelength.
     Used when calling with a specified carrier wavelength.
+
+Notes
+-----
+Before using the filter, it must be normalized. Example usage:
+
+.. code-block:: python
+
+    spectral_filter = Poly(response, 4096)
+    equiv_lambda = spectral_filter.equiv_lambda()  # store the wavelength value for later use
+    spectral_filter.normalize()  # spectral_filter is now ready for use
+
+See Also
+--------
+:external+libweif:cpp:class:`weif::sf::poly` : Base class in C++ library.
+
+Reference: Tokovinin (2003) "Polychromatic scintillation", `<https://doi.org/10.1364/JOSAA.20.000686>`_.
 )";
 
 constexpr const char* poly_call_doc = R"(
@@ -319,21 +307,21 @@ void init_sf(nb::module_& m) {
 
 	using mono_type = sf::mono<value_type>;
 	nb::class_<mono_type>(m, "Mono", mono_doc)
-		.def(nb::init<>(), mono_init_doc)
+		.def(nb::init<>())
 		.def("__call__", get_call<mono_type(value_type)>(), nb::arg("x"), mono_call_doc)
 		.def("regular", get_regular<mono_type(value_type)>(), nb::arg("x"), mono_regular_doc);
 
 	using gauss_type = sf::gauss<value_type>;
 	nb::class_<gauss_type>(m, "Gauss", gauss_doc)
-		.def(nb::init<value_type>(), nb::arg("fwhm"), gauss_init_doc)
+		.def(nb::init<value_type>(), nb::arg("fwhm"))
 		.def("__call__", get_call<gauss_type(value_type)>(), nb::arg("x"), gauss_call_doc)
 		.def("regular", get_regular<gauss_type(value_type)>(), nb::arg("x"), gauss_regular_doc);
 
 	using spectral_response_type = weif::spectral_response<value_type>;
 	using poly_type = sf::poly<value_type>;
 	nb::class_<poly_type>(m, "Poly", poly_doc)
-		.def(nb::init<const spectral_response_type&, std::size_t>(), nb::arg("response"), nb::arg("size"), poly_init_doc)
-		.def(nb::init<const spectral_response_type&, std::size_t, value_type>(), nb::arg("response"), nb::arg("size"), nb::arg("carrier"), poly_init_doc)
+		.def(nb::init<const spectral_response_type&, std::size_t>(), nb::arg("response"), nb::arg("size"))
+		.def(nb::init<const spectral_response_type&, std::size_t, value_type>(), nb::arg("response"), nb::arg("size"), nb::arg("carrier"))
 		.def("__call__", get_call<poly_type(value_type)>(), nb::arg("x"), poly_call_doc)
 		.def("regular", get_regular<poly_type(value_type)>(), nb::arg("x"), poly_regular_doc)
 		.def("normalize", &poly_type::normalize, poly_normalize_doc)

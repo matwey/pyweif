@@ -37,16 +37,6 @@ The library uses consistent units:
 - Wavelengths: nanometers (nm).
 - Geometric scales: millimeters (mm).
 
-See Also
---------
-:external+libweif:cpp:class:`weif::weight_function` : Base class in C++ library.
-:external+libweif:cpp:func:`weif::sf::poly::equiv_lambda` : Compute equivalent wavelength for polychromatic filters.
-:external+libweif:cpp:member:`weif::math::Kolmogorov_Cn2_scale` : Kolmogorov turbulence scaling.
-)";
-
-constexpr const char* weight_function_init_doc = R"(
-Constructs a weight function.
-
 The weight function is precomputed on a grid of `size` nodes using
 a numerical integration technique and subsequent interpolation is used
 when the weight_function::operator()() is invoked.
@@ -66,6 +56,9 @@ size : int
 
 See Also
 --------
+:external+libweif:cpp:class:`weif::weight_function` : Base class in C++ library.
+:external+libweif:cpp:func:`weif::sf::poly::equiv_lambda` : Compute equivalent wavelength for polychromatic filters.
+:external+libweif:cpp:member:`weif::math::Kolmogorov_Cn2_scale` : Kolmogorov turbulence scaling.
 :external+libweif:cpp:func:`weif::weight_function::weight_function` : Base constructor in C++ library.
 )";
 
@@ -104,16 +97,6 @@ The library uses consistent units:
 - Wavelengths: nanometers (nm).
 - Geometric scales: millimeters (mm).
 
-See Also
---------
-:external+libweif:cpp:class:`weif::weight_function_2d` : Base class in C++ library.
-:external+libweif:cpp:func:`weif::sf::poly::equiv_lambda` : Compute equivalent wavelength for polychromatic filters.
-:external+libweif:cpp:member:`weif::math::Kolmogorov_Cn2_scale` : Kolmogorov turbulence scaling.
-)";
-
-constexpr const char* weight_function_2d_init_doc = R"(
-Constructs a 2D weight function.
-
 The weight function is precomputed on a grid of `size` nodes using
 a numerical integration technique and subsequent interpolation is used
 when the weight_function_2d::operator()() is invoked.
@@ -133,6 +116,9 @@ size : int
 
 See Also
 --------
+:external+libweif:cpp:class:`weif::weight_function_2d` : Base class in C++ library.
+:external+libweif:cpp:func:`weif::sf::poly::equiv_lambda` : Compute equivalent wavelength for polychromatic filters.
+:external+libweif:cpp:member:`weif::math::Kolmogorov_Cn2_scale` : Kolmogorov turbulence scaling.
 :external+libweif:cpp:func:`weif::weight_function_2d::weight_function_2d` : Base constructor in C++ library.
 )";
 
@@ -179,15 +165,13 @@ void init_weight_function(nb::module_& m) {
 	using weight_function_type = weif::weight_function<value_type>;
 	nb::class_<weight_function_type>(m, "WeightFunction", weight_function_doc)
 		.def(nb::init<py_sf<value_type>, value_type, py_af<value_type>, value_type, std::size_t>(),
-			nb::arg("spectral_filter"), nb::arg("wavelength"), nb::arg("aperture_filter"), nb::arg("aperture_scale"), nb::arg("size"),
-			weight_function_init_doc)
+			nb::arg("spectral_filter"), nb::arg("wavelength"), nb::arg("aperture_filter"), nb::arg("aperture_scale"), nb::arg("size"))
 		.def("__call__", get_call<weight_function_type(value_type)>(), nb::arg("altitude"), weight_function_call_doc);
 
 	using weight_function_2d_type = weif::weight_function_2d<value_type>;
 	nb::class_<weight_function_2d_type>(m, "WeightFunction2d", weight_function_2d_doc)
 		.def(nb::init<py_sf<value_type>, value_type, py_af_2d<value_type>, value_type, std::size_t>(),
-			nb::arg("spectral_filter"), nb::arg("wavelength"), nb::arg("aperture_filter"), nb::arg("aperture_scale"), nb::arg("size"),
-			weight_function_2d_init_doc)
+			nb::arg("spectral_filter"), nb::arg("wavelength"), nb::arg("aperture_filter"), nb::arg("aperture_scale"), nb::arg("size"))
 		.def("__call__", get_call<weight_function_2d_type(value_type)>(), nb::arg("altitude"), weight_function_2d_call_doc);
 
 #if 0

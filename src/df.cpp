@@ -26,14 +26,6 @@ The digital filter function :math:`\Omega(u_x, u_y)` is evaluated on an appropri
 grid spanning :math:`[0, 0.5] \times [0, 0.5]` in dimensionless frequency space, and the
 filter impulse response is calculated using Fast Fourier Transform.
 
-See Also
---------
-:external+libweif:cpp:class:`weif::digital_filter_2d` : Base class in C++ library.
-)";
-
-constexpr const char* digital_filter_2d_init_doc = R"(
-Constructs a digital filter from a function.
-
 Parameters
 ----------
 fun : Callable[[float, float], float]
@@ -45,6 +37,7 @@ shape : tuple[int, int]
 
 See Also
 --------
+:external+libweif:cpp:class:`weif::digital_filter_2d` : Base class in C++ library.
 :external+libweif:cpp:func:`weif::digital_filter_2d::digital_filter_2d` : Base constructor in C++ library.
 )";
 
@@ -132,7 +125,7 @@ void init_df(nb::module_& m) {
 
 	using digital_filter_2d_type = weif::digital_filter_2d<value_type>;
 	nb::class_<digital_filter_2d_type>(m, "DigitalFilter2d", digital_filter_2d_doc)
-		.def(nb::init<std::function<value_type(value_type, value_type)>, digital_filter_2d_type::shape_type>(), nb::arg("fun"), nb::arg("shape"), digital_filter_2d_init_doc)
+		.def(nb::init<std::function<value_type(value_type, value_type)>, digital_filter_2d_type::shape_type>(), nb::arg("fun"), nb::arg("shape"))
 		.def("mix", &digital_filter_2d_type::mix, digital_filter_2d_mix_doc)
 		.def("mixed", &digital_filter_2d_type::mixed, digital_filter_2d_mixed_doc)
 		.def("__call__", get_call<digital_filter_2d_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), digital_filter_2d_call_doc);
