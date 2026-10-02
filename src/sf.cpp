@@ -60,7 +60,7 @@ See Also
 )";
 
 constexpr const char* mono_regular_doc = R"(
-Evaluate regularized monochromatic spectral filter.
+Evaluates the regularized monochromatic spectral filter.
 
 Evaluates :math:`x^2 E(x)`.
 
@@ -89,10 +89,11 @@ The filter combines monochromatic oscillations with Gaussian damping:
      E(x) = \sin^2(\pi x) \cdot \exp\left(-\frac{\pi^2}{8\ln 2} (x \Lambda)^2\right),
 
 where:
-- :math:`x \equiv z f^2 = \frac{u^2}{\lambda}`,
+
+- :math:`x \equiv z f^2 = \frac{u^2}{\lambda}`.
 - :math:`\Lambda` is the full width at half maximum of the Gaussian envelope expressed in relative units.
 
-Reference: Tokovinin (2003) "Polychromatic scintillation", https://doi.org/10.1364/JOSAA.20.000686
+Reference: Tokovinin (2003) "Polychromatic scintillation", `<https://doi.org/10.1364/JOSAA.20.000686>`_.
 
 See Also
 --------
@@ -100,7 +101,7 @@ See Also
 )";
 
 constexpr const char* gauss_init_doc = R"(
-Construct a Gaussian spectral filter.
+Constructs a Gaussian spectral filter.
 
 Parameters
 ----------
@@ -133,7 +134,7 @@ See Also
 )";
 
 constexpr const char* gauss_regular_doc = R"(
-Evaluate regularized Gaussian spectral filter.
+Evaluates the regularized Gaussian spectral filter.
 
 Evaluates :math:`x^2 E(x)`.
 
@@ -155,13 +156,12 @@ See Also
 constexpr const char* poly_doc = R"(
 Polychromatic spectral filter.
 
-Evaluates a polychromatic spectral filter using numerically provided spectral response data.
+Represents a polychromatic spectral filter defined by numerically provided spectral response data.
 During construction, the class computes and stores the Fourier transform of the spectral response
 for subsequent evaluations. Internally, it applies the Fourier shift theorem
 by using the carrier wavelength as the new origin point for the spectral
 response, ensuring smooth Fourier transform results and improved numerical
 accuracy. The equivalent wavelength is also evaluated during this process.
-
 
 Notes
 -----
@@ -173,7 +173,7 @@ Before using the filter, it must be normalized. Example usage:
     equiv_lambda = spectral_filter.equiv_lambda()  # store the wavelength value for later use
     spectral_filter.normalize()  # spectral_filter is now ready for use
 
-Reference: Tokovinin (2003) "Polychromatic scintillation", https://doi.org/10.1364/JOSAA.20.000686
+Reference: Tokovinin (2003) "Polychromatic scintillation", `<https://doi.org/10.1364/JOSAA.20.000686>`_.
 
 See Also
 --------
@@ -181,7 +181,7 @@ See Also
 )";
 
 constexpr const char* poly_init_doc = R"(
-Construct from spectral response.
+Constructs a polychromatic spectral filter from the spectral response.
 
 Parameters
 ----------
@@ -192,7 +192,7 @@ size : int
 )";
 
 constexpr const char* poly_init_carrier_doc = R"(
-Construct from spectral response with specified carrier wavelength.
+Constructs a polychromatic spectral filter from the spectral response with a specified carrier wavelength.
 
 Parameters
 ----------
@@ -225,7 +225,7 @@ See Also
 )";
 
 constexpr const char* poly_regular_doc = R"(
-Evaluate regularized polychromatic spectral filter.
+Evaluates the regularized polychromatic spectral filter.
 
 Evaluates :math:`x^2 E(x)`.
 
@@ -247,7 +247,7 @@ See Also
 constexpr const char* poly_normalize_doc = R"(
 Normalizes the filter in-place.
 
-After normalization the internal wavelengths in filter are expressed
+After normalization, the internal wavelengths in the filter are expressed
 in relative units as expected by weight function integrating routines.
 
 Returns
@@ -268,9 +268,10 @@ Poly
 constexpr const char* poly_equiv_lambda_doc = R"(
 Returns equivalent wavelength.
 
-Equivalent wavelength is the wavelength of the monochromatic radiation producing the same scintillation as the polychromatic filter.
+The equivalent wavelength is the wavelength of the monochromatic radiation
+producing the same scintillation as the polychromatic filter.
 
-Reference: Kornilov V., et al. (2021) "Useful relations for the analysis of stellar scintillation at the entrance pupil of a telescope", https://doi.org/10.1364/JOSAA.420572
+Reference: Kornilov V., et al. (2021) "Useful relations for the analysis of stellar scintillation at the entrance pupil of a telescope", `<https://doi.org/10.1364/JOSAA.420572>`_.
 
 Returns
 -------
