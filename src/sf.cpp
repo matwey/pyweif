@@ -181,18 +181,10 @@ See Also
 )";
 
 constexpr const char* poly_init_doc = R"(
-Constructs a polychromatic spectral filter from the spectral response.
+Constructs a polychromatic spectral filter.
 
-Parameters
-----------
-response : SpectralResponse
-    Input spectral response.
-size : int
-    Interpolation grid size.
-)";
-
-constexpr const char* poly_init_carrier_doc = R"(
-Constructs a polychromatic spectral filter from the spectral response with a specified carrier wavelength.
+The filter is constructed from a spectral response, either with the default
+carrier wavelength or with a specified carrier wavelength.
 
 Parameters
 ----------
@@ -202,6 +194,7 @@ size : int
     Interpolation grid size.
 carrier : float
     Carrier wavelength.
+    Used when calling with a specified carrier wavelength.
 )";
 
 constexpr const char* poly_call_doc = R"(
@@ -340,7 +333,7 @@ void init_sf(nb::module_& m) {
 	using poly_type = sf::poly<value_type>;
 	nb::class_<poly_type>(m, "Poly", poly_doc)
 		.def(nb::init<const spectral_response_type&, std::size_t>(), nb::arg("response"), nb::arg("size"), poly_init_doc)
-		.def(nb::init<const spectral_response_type&, std::size_t, value_type>(), nb::arg("response"), nb::arg("size"), nb::arg("carrier"), poly_init_carrier_doc)
+		.def(nb::init<const spectral_response_type&, std::size_t, value_type>(), nb::arg("response"), nb::arg("size"), nb::arg("carrier"), poly_init_doc)
 		.def("__call__", get_call<poly_type(value_type)>(), nb::arg("x"), poly_call_doc)
 		.def("regular", get_regular<poly_type(value_type)>(), nb::arg("x"), poly_regular_doc)
 		.def("normalize", &poly_type::normalize, poly_normalize_doc)

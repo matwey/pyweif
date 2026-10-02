@@ -178,22 +178,15 @@ class Poly:
     """
 
     @overload
-    def __init__(self, response: pyweif.SpectralResponse, size: int) -> None:
-        """
-        Constructs a polychromatic spectral filter from the spectral response.
-
-        Parameters
-        ----------
-        response : SpectralResponse
-            Input spectral response.
-        size : int
-            Interpolation grid size.
-        """
+    def __init__(self, response: pyweif.SpectralResponse, size: int) -> None: ...
 
     @overload
     def __init__(self, response: pyweif.SpectralResponse, size: int, carrier: float) -> None:
         """
-        Constructs a polychromatic spectral filter from the spectral response with a specified carrier wavelength.
+        Constructs a polychromatic spectral filter.
+
+        The filter is constructed from a spectral response, either with the default
+        carrier wavelength or with a specified carrier wavelength.
 
         Parameters
         ----------
@@ -203,6 +196,7 @@ class Poly:
             Interpolation grid size.
         carrier : float
             Carrier wavelength.
+            Used when calling with a specified carrier wavelength.
         """
 
     def __call__(self, x: float) -> float:

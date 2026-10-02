@@ -181,9 +181,10 @@ class WeightFunction:
     where :math:`S(u)` is a spectral filter, :math:`\\lambda` is its equivalent wavelength, and :math:`A(u)` is an aperture filter.
 
     The library uses consistent units:
-    - Altitudes: kilometers (km)
-    - Wavelengths: nanometers (nm)
-    - Geometric scales: millimeters (mm)
+
+    - Altitudes: kilometers (km).
+    - Wavelengths: nanometers (nm).
+    - Geometric scales: millimeters (mm).
 
     See Also
     --------
@@ -194,10 +195,10 @@ class WeightFunction:
 
     def __init__(self, spectral_filter: Callable[[float], float], wavelength: float, aperture_filter: Callable[[float], float], aperture_scale: float, size: int) -> None:
         """
-        Construct weight function.
+        Constructs a weight function.
 
         The weight function is precomputed on a grid of `size` nodes using
-        numerical integration technique and subsequent interpolation is used
+        a numerical integration technique and subsequent interpolation is used
         when the weight_function::operator()() is invoked.
 
         Parameters
@@ -220,7 +221,7 @@ class WeightFunction:
 
     def __call__(self, altitude: float) -> float:
         """
-        Evaluate scintillation weight function at specific altitude.
+        Evaluates the scintillation weight function at the specified altitude.
 
         Parameters
         ----------
@@ -239,9 +240,9 @@ class WeightFunction:
 
 class WeightFunction2d:
     """
-    Scintillation weight function for non axially symmetric power spectra.
+    Scintillation weight function for non-axially symmetric power spectra.
 
-    Computes the scintillation weight function for non axially symmetric power spectra:
+    Computes the scintillation weight function for non-axially symmetric power spectra:
 
     .. math::
 
@@ -250,9 +251,10 @@ class WeightFunction2d:
     where :math:`S(u)` is a spectral filter, :math:`\\lambda` is its equivalent wavelength, and :math:`A(\\mathbf{u})` is an aperture filter.
 
     The library uses consistent units:
-    - Altitudes: kilometers (km)
-    - Wavelengths: nanometers (nm)
-    - Geometric scales: millimeters (mm)
+
+    - Altitudes: kilometers (km).
+    - Wavelengths: nanometers (nm).
+    - Geometric scales: millimeters (mm).
 
     See Also
     --------
@@ -263,10 +265,10 @@ class WeightFunction2d:
 
     def __init__(self, spectral_filter: Callable[[float], float], wavelength: float, aperture_filter: Callable[[float, float], float], aperture_scale: float, size: int) -> None:
         """
-        Construct 2D weight function.
+        Constructs a 2D weight function.
 
         The weight function is precomputed on a grid of `size` nodes using
-        numerical integration technique and subsequent interpolation is used
+        a numerical integration technique and subsequent interpolation is used
         when the weight_function_2d::operator()() is invoked.
 
         Parameters
@@ -289,7 +291,7 @@ class WeightFunction2d:
 
     def __call__(self, altitude: float) -> float:
         """
-        Evaluate scintillation weight function at specific altitude.
+        Evaluates the scintillation weight function at the specified altitude.
 
         Parameters
         ----------

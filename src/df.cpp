@@ -18,7 +18,7 @@ namespace nb = nanobind;
 constexpr const char* digital_filter_2d_doc = R"(
 Digital filter function.
 
-Implements a two‑dimensional digital filter defined by its impulse response.
+Implements a two-dimensional digital filter defined by its impulse response.
 The filter can be constructed either from a function :math:`\Omega(u_x, u_y)` evaluated on
 a frequency grid, or directly from an impulse response tensor.
 
@@ -32,13 +32,13 @@ See Also
 )";
 
 constexpr const char* digital_filter_2d_init_doc = R"(
-Construct digital filter from a function.
+Constructs a digital filter from a function.
 
 Parameters
 ----------
 fun : Callable[[float, float], float]
     Digital filter function :math:`\Omega(u_x, u_y)` that returns the filter response
-    for given dimensionless frequency coordinates.
+    for the given dimensionless frequency coordinates.
 shape : tuple[int, int]
     Filter dimensions (Nx, Ny). The impulse response will be computed
     on a grid of this size.
@@ -49,9 +49,9 @@ See Also
 )";
 
 constexpr const char* digital_filter_2d_mix_doc = R"(
-Performs in‑place amplitude mixing.
+Performs in-place amplitude mixing.
 
-Modifies the impulse response by subtracting a checkerboard sign‑alternation
+Modifies the impulse response by subtracting a checkerboard sign-alternation
 pattern to set the center (0,0) to zero. This operation is used to remove
 the DC component of the filter.
 
@@ -82,17 +82,17 @@ See Also
 )";
 
 constexpr const char* digital_filter_2d_call_doc = R"(
-Evaluate digital filter at specific frequency coordinates.
+Evaluates the digital filter at the specified frequency coordinates.
 
-Computes the filter response for given dimensionless frequency components
+Computes the filter response for the given dimensionless frequency components
 using the discrete Fourier transform of the impulse response.
 
 Parameters
 ----------
 ux : float
-    Dimensionless frequency x‑component.
+    Dimensionless frequency component in the x-direction.
 uy : float
-    Dimensionless frequency y‑component.
+    Dimensionless frequency component in the y-direction.
 
 Returns
 -------
