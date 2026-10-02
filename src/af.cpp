@@ -34,53 +34,36 @@ See Also
 )";
 
 constexpr const char* circular_init_doc = R"(
-Constructs an circular aperture filter.
+Constructs a circular aperture filter.
 )";
 
-constexpr const char* circular_call1_doc = R"(
-Call operator for circular aperture filter in radial coordinates.
+constexpr const char* circular_call_doc = R"(
+Call operator for circular aperture filter in radial and Cartesian coordinates.
+
+Evaluates the squared jinc function at the given spatial frequency, either in
+radial or Cartesian coordinates:
+
+.. math::
+
+     A(u) &= \mathrm{jinc}_1^2(\pi u),\\
+     A(u_x, u_y) &= \mathrm{jinc}_1^2\left(\pi \sqrt{u_x^2 + u_y^2}\right).
 
 Parameters
 ----------
 u : float
-    Dimensionless spatial frequency magnitude (radial coordinate)
-
-Evaluates the squared jinc function for given radial frequency:
-
-.. math::
-
-     A(u) = \mathrm{jinc}_1^2(\pi u).
-
-Returns
--------
-float
-    Aperture filter value at specified frequency
-
-See Also
---------
-:external+libweif:cpp:func:`weif::af::circular::operator()` : Base function in C++ library.
-)";
-
-constexpr const char* circular_call2_doc = R"(
-Call operator for circular aperture filter in Cartesian coordinates.
-
-Evaluates the filter by converting to radial coordinates:
-
-.. math::
-
-     A(u_x, u_y) = A\left(\sqrt{u_x^2 + u_y^2}\right).
-
-Parameters
-----------
+    Dimensionless spatial frequency magnitude (radial coordinate).
+    Used when calling with a single argument.
 ux : float
-    Dimensionless spatial frequency component in x-direction.
+    Dimensionless spatial frequency component in the x-direction.
+    Used when calling with two arguments (Cartesian coordinates).
 uy : float
-    Dimensionless spatial frequency component in y-direction.
+    Dimensionless spatial frequency component in the y-direction.
+    Used when calling with two arguments (Cartesian coordinates).
 
 Returns
 -------
 float
-    Aperture filter value at specified frequency coordinates
+    Aperture filter value at the specified frequency.
 
 See Also
 --------
@@ -108,58 +91,41 @@ See Also
 )";
 
 constexpr const char* annular_init_doc = R"(
-Constructs an annular aperture filter with given obscuration.
+Constructs an annular aperture filter with the given obscuration.
 
 Parameters
 ----------
 obscuration : float
-    Central obscuration ratio (:math:`0 \le \epsilon < 1`)
+    Central obscuration ratio (:math:`0 \le \epsilon < 1`).
 )";
 
-constexpr const char* annular_call1_doc = R"(
-Call operator for annular aperture filter in radial coordinates.
+constexpr const char* annular_call_doc = R"(
+Call operator for annular aperture filter in radial and Cartesian coordinates.
 
-Evaluates the squared normalized difference of jinc functions:
+Evaluates the squared normalized difference of jinc functions at the given
+spatial frequency, either in radial or Cartesian coordinates:
 
 .. math::
 
-     A(u) = \frac{\left(\mathrm{jinc}_1(\pi u) - \epsilon^2 \mathrm{jinc}_1(\pi \epsilon u)\right)^2}{(1 - \epsilon^2)^2}.
+     A(u) &= \frac{\left(\mathrm{jinc}_1(\pi u) - \epsilon^2 \mathrm{jinc}_1(\pi \epsilon u)\right)^2}{(1 - \epsilon^2)^2},\\
+     A(u_x, u_y) &= A\left(\sqrt{u_x^2 + u_y^2}\right).
 
 Parameters
 ----------
 u : float
-    Dimensionless spatial frequency magnitude (radial coordinate)
-
-Returns
--------
-float
-    Aperture filter value at specified frequency
-
-See Also
---------
-:external+libweif:cpp:func:`weif::af::annular::operator()` : Base function in C++ library.
-)";
-
-constexpr const char* annular_call2_doc = R"(
-Call operator for annular aperture filter in Cartesian coordinates.
-
-Evaluates the filter by converting to radial coordinates:
-
-.. math::
-
-     A(u_x, u_y) = A\left(\sqrt{u_x^2 + u_y^2}\right).
-
-Parameters
-----------
+    Dimensionless spatial frequency magnitude (radial coordinate).
+    Used when calling with a single argument.
 ux : float
-    Dimensionless spatial frequency component in x-direction.
+    Dimensionless spatial frequency component in the x-direction.
+    Used when calling with two arguments (Cartesian coordinates).
 uy : float
-    Dimensionless spatial frequency component in y-direction.
+    Dimensionless spatial frequency component in the y-direction.
+    Used when calling with two arguments (Cartesian coordinates).
 
 Returns
 -------
 float
-    Aperture filter value at specified frequency coordinates
+    Aperture filter value at the specified frequency.
 
 See Also
 --------
@@ -167,7 +133,7 @@ See Also
 )";
 
 constexpr const char* cross_annular_doc = R"(
-Aperture filter for covariance between two concentric annular apertures.
+Aperture filter function for covariance between two concentric annular apertures.
 
 Models the covariance of relative flux fluctuations between two annular apertures
 as used in MASS (Multi-Aperture Scintillation Sensor) instruments:
@@ -178,11 +144,12 @@ as used in MASS (Multi-Aperture Scintillation Sensor) instruments:
             \times \frac{\left(\mathrm{jinc}_1(\pi \alpha u) - \epsilon_2^2 \mathrm{jinc}_1(\pi \epsilon_2 \alpha u)\right)}{(1 - \epsilon_2^2)},
 
 where:
-- :math:`\epsilon_1` is the central obscuration ratio of the first aperture,
-- :math:`\epsilon_2` is the central obscuration ratio of the second aperture,
-- :math:`\alpha = D_2/D_1` is the diameter ratio between apertures.
 
-Reference: Tokovinin, et. al. (2003) "Restoration of turbulence profile from scintillation indices", https://doi.org/10.1046/j.1365-8711.2003.06731.x
+- :math:`\epsilon_1` is the central obscuration ratio of the first aperture.
+- :math:`\epsilon_2` is the central obscuration ratio of the second aperture.
+- :math:`\alpha = D_2/D_1` is the diameter ratio between the apertures.
+
+Reference: Tokovinin, et al. (2003) "Restoration of turbulence profile from scintillation indices", `<https://doi.org/10.1046/j.1365-8711.2003.06731.x>`_.
 
 See Also
 --------
@@ -202,46 +169,34 @@ obscuration_second : float
     Obscuration ratio :math:`\epsilon_2` of second aperture (:math:`0 \le \epsilon_2 < 1`).
 )";
 
-constexpr const char* cross_annular_call1_doc = R"(
-Call operator for the aperture filter in radial coordinates.
+constexpr const char* cross_annular_call_doc = R"(
+Call operator for cross-annular aperture filter in radial and Cartesian coordinates.
 
-Evaluates the filter in radial coordinates.
+Evaluates the covariance filter at the given spatial frequency, either in
+radial or Cartesian coordinates:
+
+.. math::
+
+     A(u) &= \frac{\left(\mathrm{jinc}_1(\pi u) - \epsilon_1^2 \mathrm{jinc}_1(\pi \epsilon_1 u)\right)}{(1 - \epsilon_1^2)}\\
+           &\quad \times \frac{\left(\mathrm{jinc}_1(\pi \alpha u) - \epsilon_2^2 \mathrm{jinc}_1(\pi \epsilon_2 \alpha u)\right)}{(1 - \epsilon_2^2)},\\
+     A(u_x, u_y) &= A\left(\sqrt{u_x^2 + u_y^2}\right).
 
 Parameters
 ----------
 u : float
-    Dimensionless spatial frequency magnitude (radial coordinate)
-
-Returns
--------
-float
-    Aperture filter value at specified frequency
-
-See Also
---------
-:external+libweif:cpp:func:`weif::af::cross_annular::operator()` : Base function in C++ library.
-)";
-
-constexpr const char* cross_annular_call2_doc = R"(
-Call operator for the aperture filter in Cartesian coordinates.
-
-Evaluates the filter by converting to radial coordinates:
-
-.. math::
-
-     A(u_x, u_y) = A\left(\sqrt{u_x^2 + u_y^2}\right).
-
-Parameters
-----------
+    Dimensionless spatial frequency magnitude (radial coordinate).
+    Used when calling with a single argument.
 ux : float
-    Dimensionless spatial frequency component in x-direction.
+    Dimensionless spatial frequency component in the x-direction.
+    Used when calling with two arguments (Cartesian coordinates).
 uy : float
-    Dimensionless spatial frequency component in y-direction.
+    Dimensionless spatial frequency component in the y-direction.
+    Used when calling with two arguments (Cartesian coordinates).
 
 Returns
 -------
 float
-    Aperture filter value at specified frequency coordinates
+    Aperture filter value at the specified frequency.
 
 See Also
 --------
@@ -257,7 +212,7 @@ The aperture filter is defined in both radial and Cartesian plane coordinates:
 
      A(u) = A(u_x, u_y) = 1.
 
-This represents an ideal point aperture.
+This represents an ideal point aperture: the filter value is constant and equal to 1 at any frequency.
 
 See Also
 --------
@@ -268,50 +223,33 @@ constexpr const char* point_init_doc = R"(
 Constructs a point aperture filter.
 )";
 
-constexpr const char* point_call1_doc = R"(
-Call operator for point aperture filter in radial coordinates.
+constexpr const char* point_call_doc = R"(
+Call operator for point aperture filter in radial and Cartesian coordinates.
 
-Evaluates the filter function for a given radial frequency:
+Evaluates the aperture filter at the given spatial frequency, either in radial
+or Cartesian coordinates:
 
 .. math::
 
-     A(u) = 1.
+     A(u) &= 1,\\
+     A(u_x, u_y) &= 1.
 
 Parameters
 ----------
 u : float
-    Dimensionless spatial frequency magnitude (radial coordinate)
-
-Returns
--------
-float
-    Aperture filter value (always 1 for point aperture)
-
-See Also
---------
-:external+libweif:cpp:func:`weif::af::point::operator()` : Base function in C++ library.
-)";
-
-constexpr const char* point_call2_doc = R"(
-Call operator for point aperture filter in Cartesian coordinates.
-
-Evaluates the filter function for given frequency components:
-
-.. math::
-
-     A(u_x, u_y) = 1.
-
-Parameters
-----------
+    Dimensionless spatial frequency magnitude (radial coordinate).
+    Used when calling with a single argument.
 ux : float
-    Dimensionless spatial frequency component in x-direction.
+    Dimensionless spatial frequency component in the x-direction.
+    Used when calling with two arguments (Cartesian coordinates).
 uy : float
-    Dimensionless spatial frequency component in y-direction.
+    Dimensionless spatial frequency component in the y-direction.
+    Used when calling with two arguments (Cartesian coordinates).
 
 Returns
 -------
 float
-    Aperture filter value (always 1 for point aperture)
+    Aperture filter value at the specified frequency, always 1 for a point aperture.
 
 See Also
 --------
@@ -350,14 +288,14 @@ Evaluates the squared 2D sinc function:
 Parameters
 ----------
 ux : float
-    Dimensionless spatial frequency in x-direction.
+    Dimensionless spatial frequency component in the x-direction.
 uy : float
-    Dimensionless spatial frequency in y-direction.
+    Dimensionless spatial frequency component in the y-direction.
 
 Returns
 -------
 float
-    Aperture filter value at specified frequencies
+    Aperture filter value at the specified frequency.
 
 See Also
 --------
@@ -392,26 +330,26 @@ void init_af(nb::module_& m) {
 	using circular_type = af::circular<value_type>;
 	nb::class_<circular_type>(m, "Circular", circular_doc)
 		.def(nb::init<>(), circular_init_doc)
-		.def("__call__", get_call<circular_type(value_type)>(), nb::arg("u"), circular_call1_doc)
-		.def("__call__", get_call<circular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), circular_call2_doc);
+		.def("__call__", get_call<circular_type(value_type)>(), nb::arg("u"), circular_call_doc)
+		.def("__call__", get_call<circular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), circular_call_doc);
 
 	using annular_type = af::annular<value_type>;
 	nb::class_<af::annular<value_type>>(m, "Annular", annular_doc)
 		.def(nb::init<value_type>(), nb::arg("obscuration"), annular_init_doc)
-		.def("__call__", get_call<annular_type(value_type)>(), nb::arg("u"), annular_call1_doc)
-		.def("__call__", get_call<annular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), annular_call2_doc);
+		.def("__call__", get_call<annular_type(value_type)>(), nb::arg("u"), annular_call_doc)
+		.def("__call__", get_call<annular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), annular_call_doc);
 
 	using cross_annular_type = af::cross_annular<value_type>;
 	nb::class_<af::cross_annular<value_type>>(m, "CrossAnnular", cross_annular_doc)
 		.def(nb::init<value_type, value_type, value_type>(), nb::arg("ratio"), nb::arg("obscuration_first"), nb::arg("obscuration_second"), cross_annular_init_doc)
-		.def("__call__", get_call<cross_annular_type(value_type)>(), nb::arg("u"), cross_annular_call1_doc)
-		.def("__call__", get_call<cross_annular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), cross_annular_call2_doc);
+		.def("__call__", get_call<cross_annular_type(value_type)>(), nb::arg("u"), cross_annular_call_doc)
+		.def("__call__", get_call<cross_annular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), cross_annular_call_doc);
 
 	using point_type = af::point<value_type>;
 	nb::class_<point_type>(m, "Point", point_doc)
 		.def(nb::init<>(), point_init_doc)
-		.def("__call__", get_call<point_type(value_type)>(), nb::arg("u"), point_call1_doc)
-		.def("__call__", get_call<point_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), point_call2_doc);
+		.def("__call__", get_call<point_type(value_type)>(), nb::arg("u"), point_call_doc)
+		.def("__call__", get_call<point_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), point_call_doc);
 
 	using square_type = af::square<value_type>;
 	nb::class_<square_type>(m, "Square", square_doc)
