@@ -13,7 +13,7 @@ The easiest way to install pyweif is via pip::
 
     pip install pyweif
 
-Pre‑built wheels are available for many Python versions and Linux platforms.
+Pre-built wheels are available for many Python versions and Linux platforms.
 The wheels already include the required C++ dependencies, so you do not need to install any required dependencies separately.
 
 Build from sources
@@ -36,7 +36,7 @@ The simplest way to satisfy the ``libweif`` dependency is to use `vcpkg <https:/
 The repository contains a ``vcpkg.json`` manifest that declares the required ports.
 If you have vcpkg installed and configured (e.g., via ``CMAKE_TOOLCHAIN_FILE``), the build will automatically fetch and build ``libweif`` and its dependencies.
 
-Alternatively, you can install ``libweif`` system‑wide or in any other path if ``PKG_CONFIG_PATH`` is set accordingly.
+Alternatively, you can install ``libweif`` system-wide or in any other path if ``PKG_CONFIG_PATH`` is set accordingly.
 
 Once the dependencies are available, the package can be built with::
 

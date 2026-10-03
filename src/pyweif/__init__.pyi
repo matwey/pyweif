@@ -184,7 +184,7 @@ class WeightFunction:
 
     The weight function is precomputed on a grid of `size` nodes using
     a numerical integration technique and subsequent interpolation is used
-    when the weight_function::operator()() is invoked.
+    when the call operator is invoked.
 
     Parameters
     ----------
@@ -248,7 +248,7 @@ class WeightFunction2d:
 
     The weight function is precomputed on a grid of `size` nodes using
     a numerical integration technique and subsequent interpolation is used
-    when the weight_function_2d::operator()() is invoked.
+    when the call operator is invoked.
 
     Parameters
     ----------
