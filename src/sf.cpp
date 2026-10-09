@@ -56,7 +56,7 @@ float or ndarray
 
 See Also
 --------
-:external+libweif:cpp:func:`weif::sf::mono::operator()` : Base function in C++ library.
+:external+libweif:cpp:func:`weif::sf::mono::operator()()` : Base function in C++ library.
 )";
 
 constexpr const char* mono_regular_doc = R"(
@@ -131,7 +131,7 @@ float or ndarray
 
 See Also
 --------
-:external+libweif:cpp:func:`weif::sf::gauss::operator()` : Base function in C++ library.
+:external+libweif:cpp:func:`weif::sf::gauss::operator()()` : Base function in C++ library.
 )";
 
 constexpr const char* gauss_regular_doc = R"(
@@ -216,7 +216,7 @@ float or ndarray
 
 See Also
 --------
-:external+libweif:cpp:func:`weif::sf::poly::operator()` : Base function in C++ library.
+:external+libweif:cpp:func:`weif::sf::poly::operator()()` : Base function in C++ library.
 )";
 
 constexpr const char* poly_regular_doc = R"(

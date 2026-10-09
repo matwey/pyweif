@@ -66,7 +66,7 @@ float or ndarray
 
 See Also
 --------
-:external+libweif:cpp:func:`weif::af::circular::operator()` : Base function in C++ library.
+:external+libweif:cpp:func:`weif::af::circular::operator()()` : Base function in C++ library.
 )";
 
 constexpr const char* annular_doc = R"(
@@ -126,7 +126,7 @@ float or ndarray
 
 See Also
 --------
-:external+libweif:cpp:func:`weif::af::annular::operator()` : Base function in C++ library.
+:external+libweif:cpp:func:`weif::af::annular::operator()()` : Base function in C++ library.
 )";
 
 constexpr const char* cross_annular_doc = R"(
@@ -195,7 +195,7 @@ float or ndarray
 
 See Also
 --------
-:external+libweif:cpp:func:`weif::af::cross_annular::operator()` : Base function in C++ library.
+:external+libweif:cpp:func:`weif::af::cross_annular::operator()()` : Base function in C++ library.
 )";
 
 constexpr const char* point_doc = R"(
@@ -247,7 +247,7 @@ float or ndarray
 
 See Also
 --------
-:external+libweif:cpp:func:`weif::af::point::operator()` : Base function in C++ library.
+:external+libweif:cpp:func:`weif::af::point::operator()()` : Base function in C++ library.
 )";
 
 constexpr const char* square_doc = R"(
@@ -293,7 +293,7 @@ float or ndarray
 
 See Also
 --------
-:external+libweif:cpp:func:`weif::af::square::operator()` : Base function in C++ library.
+:external+libweif:cpp:func:`weif::af::square::operator()()` : Base function in C++ library.
 )";
 
 template<class F> struct get_call_helper;

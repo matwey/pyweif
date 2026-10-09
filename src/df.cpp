@@ -103,7 +103,7 @@ float or ndarray
 
 See Also
 --------
-:external+libweif:cpp:func:`weif::digital_filter_2d::operator()` : Base function in C++ library.
+:external+libweif:cpp:func:`weif::digital_filter_2d::operator()()` : Base function in C++ library.
 )";
 
 

@@ -62,7 +62,7 @@ class Mono:
 
         See Also
         --------
-        :external+libweif:cpp:func:`weif::sf::mono::operator()` : Base function in C++ library.
+        :external+libweif:cpp:func:`weif::sf::mono::operator()()` : Base function in C++ library.
         """
 
     @overload
@@ -162,7 +162,7 @@ class Gauss:
 
         See Also
         --------
-        :external+libweif:cpp:func:`weif::sf::gauss::operator()` : Base function in C++ library.
+        :external+libweif:cpp:func:`weif::sf::gauss::operator()()` : Base function in C++ library.
         """
 
     @overload
@@ -276,7 +276,7 @@ class Poly:
 
         See Also
         --------
-        :external+libweif:cpp:func:`weif::sf::poly::operator()` : Base function in C++ library.
+        :external+libweif:cpp:func:`weif::sf::poly::operator()()` : Base function in C++ library.
         """
 
     @overload

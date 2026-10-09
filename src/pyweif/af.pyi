@@ -83,7 +83,7 @@ class Circular:
 
         See Also
         --------
-        :external+libweif:cpp:func:`weif::af::circular::operator()` : Base function in C++ library.
+        :external+libweif:cpp:func:`weif::af::circular::operator()()` : Base function in C++ library.
         """
 
 class Annular:
@@ -169,7 +169,7 @@ class Annular:
 
         See Also
         --------
-        :external+libweif:cpp:func:`weif::af::annular::operator()` : Base function in C++ library.
+        :external+libweif:cpp:func:`weif::af::annular::operator()()` : Base function in C++ library.
         """
 
 class CrossAnnular:
@@ -264,7 +264,7 @@ class CrossAnnular:
 
         See Also
         --------
-        :external+libweif:cpp:func:`weif::af::cross_annular::operator()` : Base function in C++ library.
+        :external+libweif:cpp:func:`weif::af::cross_annular::operator()()` : Base function in C++ library.
         """
 
 class Point:
@@ -342,7 +342,7 @@ class Point:
 
         See Also
         --------
-        :external+libweif:cpp:func:`weif::af::point::operator()` : Base function in C++ library.
+        :external+libweif:cpp:func:`weif::af::point::operator()()` : Base function in C++ library.
         """
 
 class Square:
@@ -402,5 +402,5 @@ class Square:
 
         See Also
         --------
-        :external+libweif:cpp:func:`weif::af::square::operator()` : Base function in C++ library.
+        :external+libweif:cpp:func:`weif::af::square::operator()()` : Base function in C++ library.
         """

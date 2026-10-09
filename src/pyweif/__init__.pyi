@@ -245,7 +245,7 @@ class WeightFunction:
     --------
     :external+libweif:cpp:class:`weif::weight_function` : Base class in C++ library.
     :external+libweif:cpp:func:`weif::sf::poly::equiv_lambda` : Compute equivalent wavelength for polychromatic filters.
-    :external+libweif:cpp:member:`weif::math::Kolmogorov_Cn2_scale` : Kolmogorov turbulence scaling.
+    :external+libweif:cpp:member:`Kolmogorov_Cn2_scale` : Kolmogorov turbulence scaling.
     :external+libweif:cpp:func:`weif::weight_function::weight_function` : Base constructor in C++ library.
     """
 
@@ -290,7 +290,7 @@ class WeightFunction:
 
         See Also
         --------
-        :external+libweif:cpp:func:`weif::weight_function::operator()` : Base function in C++ library.
+        :external+libweif:cpp:func:`weif::weight_function::operator()()` : Base function in C++ library.
         """
 
 class WeightFunction2d:
@@ -332,7 +332,7 @@ class WeightFunction2d:
     --------
     :external+libweif:cpp:class:`weif::weight_function_2d` : Base class in C++ library.
     :external+libweif:cpp:func:`weif::sf::poly::equiv_lambda` : Compute equivalent wavelength for polychromatic filters.
-    :external+libweif:cpp:member:`weif::math::Kolmogorov_Cn2_scale` : Kolmogorov turbulence scaling.
+    :external+libweif:cpp:member:`Kolmogorov_Cn2_scale` : Kolmogorov turbulence scaling.
     :external+libweif:cpp:func:`weif::weight_function_2d::weight_function_2d` : Base constructor in C++ library.
     """
 
@@ -377,5 +377,5 @@ class WeightFunction2d:
 
         See Also
         --------
-        :external+libweif:cpp:func:`weif::weight_function_2d::operator()` : Base function in C++ library.
+        :external+libweif:cpp:func:`weif::weight_function_2d::operator()()` : Base function in C++ library.
         """
