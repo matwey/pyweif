@@ -62,11 +62,18 @@ addopts = [
 ]
 
 [tool.cibuildwheel]
-before-all = "pipx install ninja && yum -y install curl zip unzip tar && git clone --depth 1 https://github.com/microsoft/vcpkg /opt/vcpkg && /opt/vcpkg/bootstrap-vcpkg.sh -disableMetrics"
-environment = { CMAKE_TOOLCHAIN_FILE = "/opt/vcpkg/scripts/buildsystems/vcpkg.cmake", VCPKG_FORCE_SYSTEM_BINARIES = "1" }
 build-verbosity = 1
 config-settings = { "logging.level" = "INFO" }
 test-extras = ["dev"]
 test-command = "pytest {project}/tests"
 archs = ["x86_64"]
 skip = "*musllinux*"
+
+[tool.cibuildwheel.linux]
+before-all = "pipx install ninja && yum -y install curl zip unzip tar && git clone --depth 1 https://github.com/microsoft/vcpkg /opt/vcpkg && /opt/vcpkg/bootstrap-vcpkg.sh -disableMetrics"
+environment = { CMAKE_TOOLCHAIN_FILE = "/opt/vcpkg/scripts/buildsystems/vcpkg.cmake", VCPKG_FORCE_SYSTEM_BINARIES = "1" }
+
+[tool.cibuildwheel.macos]
+archs = ["auto"]
+before-all = "git clone --depth 1 https://github.com/microsoft/vcpkg /tmp/vcpkg && /tmp/vcpkg/bootstrap-vcpkg.sh -disableMetrics"
+environment = { CMAKE_TOOLCHAIN_FILE = "/tmp/vcpkg/scripts/buildsystems/vcpkg.cmake" }

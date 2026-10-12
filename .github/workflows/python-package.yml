@@ -10,11 +10,12 @@ on:
 
 jobs:
   build:
-    name: Build package
-    runs-on: ubuntu-latest
+    name: Build package on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
       matrix:
+        os: [ubuntu-latest, macos-15, macos-15-intel]
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
 
     steps:
@@ -34,8 +35,8 @@ jobs:
       uses: actions/cache/restore@v6
       with:
         path: ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
-        key: vcpkg-${{runner.os}}-${{runner.arch}}-${{ hashFiles('vcpkg.json') }}
-        restore-keys: vcpkg-${{runner.os}}-${{runner.arch}}-
+        key: vcpkg-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('vcpkg.json') }}
+        restore-keys: vcpkg-${{ runner.os }}-${{ runner.arch }}-
 
     - name: Install dependencies
       run: |
@@ -53,7 +54,7 @@ jobs:
       uses: actions/cache/save@v6
       with:
         path: ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
-        key: vcpkg-${{runner.os}}-${{runner.arch}}-${{ hashFiles('vcpkg.json') }}
+        key: vcpkg-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('vcpkg.json') }}
 
   pre-commit:
     name: Check pre-commit hooks
@@ -102,10 +103,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, macos-15, macos-15-intel]
 
     steps:
       - uses: actions/checkout@v7
+
+      - name: Set Intel macOS deployment target
+        if: matrix.os == 'macos-15-intel'
+        run: echo "MACOSX_DEPLOYMENT_TARGET=10.13" >> "$GITHUB_ENV"
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v4.2.1
