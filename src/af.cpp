@@ -6,6 +6,7 @@
  */
 
 #include <nanobind/nanobind.h>
+#include <nanobind/xtensor.h>
 
 #include "af.h"
 
@@ -37,7 +38,8 @@ constexpr const char* circular_call_doc = R"(
 Call operator for circular aperture filter in radial and Cartesian coordinates.
 
 Evaluates the squared jinc function at the given spatial frequency, either in
-radial or Cartesian coordinates:
+radial or Cartesian coordinates. The evaluation is vectorized: passing arrays
+returns an array of filter values.
 
 .. math::
 
@@ -46,24 +48,25 @@ radial or Cartesian coordinates:
 
 Parameters
 ----------
-u : float
+u : float or array_like
     Dimensionless spatial frequency magnitude (radial coordinate).
-    Used when calling with a single argument.
-ux : float
+    Used when calling with a single argument (scalar or array of any shape).
+ux : float or array_like
     Dimensionless spatial frequency component in the x-direction.
-    Used when calling with two arguments (Cartesian coordinates).
-uy : float
+    Used when calling with two arguments (scalar or 1-D array).
+uy : float or array_like
     Dimensionless spatial frequency component in the y-direction.
-    Used when calling with two arguments (Cartesian coordinates).
+    Used when calling with two arguments (scalar or 1-D array).
 
 Returns
 -------
-float
-    Aperture filter value at the specified frequency.
+float or ndarray
+    Aperture filter value(s). For 1-D arrays ux of shape (N,) and uy of
+    shape (M,), the result is a 2-D array of shape (N, M).
 
 See Also
 --------
-:external+libweif:cpp:func:`weif::af::circular::operator()` : Base function in C++ library.
+:external+libweif:cpp:func:`weif::af::circular::operator()()` : Base function in C++ library.
 )";
 
 constexpr const char* annular_doc = R"(
@@ -95,7 +98,8 @@ constexpr const char* annular_call_doc = R"(
 Call operator for annular aperture filter in radial and Cartesian coordinates.
 
 Evaluates the squared normalized difference of jinc functions at the given
-spatial frequency, either in radial or Cartesian coordinates:
+spatial frequency, either in radial or Cartesian coordinates. The evaluation
+is vectorized: passing arrays returns an array of filter values.
 
 .. math::
 
@@ -104,24 +108,25 @@ spatial frequency, either in radial or Cartesian coordinates:
 
 Parameters
 ----------
-u : float
+u : float or array_like
     Dimensionless spatial frequency magnitude (radial coordinate).
-    Used when calling with a single argument.
-ux : float
+    Used when calling with a single argument (scalar or array of any shape).
+ux : float or array_like
     Dimensionless spatial frequency component in the x-direction.
-    Used when calling with two arguments (Cartesian coordinates).
-uy : float
+    Used when calling with two arguments (scalar or 1-D array).
+uy : float or array_like
     Dimensionless spatial frequency component in the y-direction.
-    Used when calling with two arguments (Cartesian coordinates).
+    Used when calling with two arguments (scalar or 1-D array).
 
 Returns
 -------
-float
-    Aperture filter value at the specified frequency.
+float or ndarray
+    Aperture filter value(s). For 1-D arrays ux of shape (N,) and uy of
+    shape (M,), the result is a 2-D array of shape (N, M).
 
 See Also
 --------
-:external+libweif:cpp:func:`weif::af::annular::operator()` : Base function in C++ library.
+:external+libweif:cpp:func:`weif::af::annular::operator()()` : Base function in C++ library.
 )";
 
 constexpr const char* cross_annular_doc = R"(
@@ -161,7 +166,8 @@ constexpr const char* cross_annular_call_doc = R"(
 Call operator for cross-annular aperture filter in radial and Cartesian coordinates.
 
 Evaluates the covariance filter at the given spatial frequency, either in
-radial or Cartesian coordinates:
+radial or Cartesian coordinates. The evaluation is vectorized: passing arrays
+returns an array of filter values.
 
 .. math::
 
@@ -171,24 +177,25 @@ radial or Cartesian coordinates:
 
 Parameters
 ----------
-u : float
+u : float or array_like
     Dimensionless spatial frequency magnitude (radial coordinate).
-    Used when calling with a single argument.
-ux : float
+    Used when calling with a single argument (scalar or array of any shape).
+ux : float or array_like
     Dimensionless spatial frequency component in the x-direction.
-    Used when calling with two arguments (Cartesian coordinates).
-uy : float
+    Used when calling with two arguments (scalar or 1-D array).
+uy : float or array_like
     Dimensionless spatial frequency component in the y-direction.
-    Used when calling with two arguments (Cartesian coordinates).
+    Used when calling with two arguments (scalar or 1-D array).
 
 Returns
 -------
-float
-    Aperture filter value at the specified frequency.
+float or ndarray
+    Aperture filter value(s). For 1-D arrays ux of shape (N,) and uy of
+    shape (M,), the result is a 2-D array of shape (N, M).
 
 See Also
 --------
-:external+libweif:cpp:func:`weif::af::cross_annular::operator()` : Base function in C++ library.
+:external+libweif:cpp:func:`weif::af::cross_annular::operator()()` : Base function in C++ library.
 )";
 
 constexpr const char* point_doc = R"(
@@ -211,7 +218,8 @@ constexpr const char* point_call_doc = R"(
 Call operator for point aperture filter in radial and Cartesian coordinates.
 
 Evaluates the aperture filter at the given spatial frequency, either in radial
-or Cartesian coordinates:
+or Cartesian coordinates. The evaluation is vectorized: passing arrays returns
+an array of filter values.
 
 .. math::
 
@@ -220,24 +228,26 @@ or Cartesian coordinates:
 
 Parameters
 ----------
-u : float
+u : float or array_like
     Dimensionless spatial frequency magnitude (radial coordinate).
-    Used when calling with a single argument.
-ux : float
+    Used when calling with a single argument (scalar or array of any shape).
+ux : float or array_like
     Dimensionless spatial frequency component in the x-direction.
-    Used when calling with two arguments (Cartesian coordinates).
-uy : float
+    Used when calling with two arguments (scalar or 1-D array).
+uy : float or array_like
     Dimensionless spatial frequency component in the y-direction.
-    Used when calling with two arguments (Cartesian coordinates).
+    Used when calling with two arguments (scalar or 1-D array).
 
 Returns
 -------
-float
-    Aperture filter value at the specified frequency, always 1 for a point aperture.
+float or ndarray
+    Aperture filter value(s), always 1 for a point aperture. For 1-D arrays
+    ux of shape (N,) and uy of shape (M,), the result is a 2-D array of
+    shape (N, M).
 
 See Also
 --------
-:external+libweif:cpp:func:`weif::af::point::operator()` : Base function in C++ library.
+:external+libweif:cpp:func:`weif::af::point::operator()()` : Base function in C++ library.
 )";
 
 constexpr const char* square_doc = R"(
@@ -259,7 +269,8 @@ See Also
 constexpr const char* square_call_doc = R"(
 Call operator for square aperture filter in Cartesian coordinates.
 
-Evaluates the squared 2D sinc function:
+Evaluates the squared 2D sinc function. The evaluation is vectorized: passing
+arrays returns an array of filter values.
 
 .. math::
 
@@ -267,19 +278,22 @@ Evaluates the squared 2D sinc function:
 
 Parameters
 ----------
-ux : float
+ux : float or array_like
     Dimensionless spatial frequency component in the x-direction.
-uy : float
+    Used when calling with two arguments (scalar or 1-D array).
+uy : float or array_like
     Dimensionless spatial frequency component in the y-direction.
+    Used when calling with two arguments (scalar or 1-D array).
 
 Returns
 -------
-float
-    Aperture filter value at the specified frequency.
+float or ndarray
+    Aperture filter value(s). For 1-D arrays ux of shape (N,) and uy of
+    shape (M,), the result is a 2-D array of shape (N, M).
 
 See Also
 --------
-:external+libweif:cpp:func:`weif::af::square::operator()` : Base function in C++ library.
+:external+libweif:cpp:func:`weif::af::square::operator()()` : Base function in C++ library.
 )";
 
 template<class F> struct get_call_helper;
@@ -311,28 +325,55 @@ void init_af(nb::module_& m) {
 	nb::class_<circular_type>(m, "Circular", circular_doc)
 		.def(nb::init<>())
 		.def("__call__", get_call<circular_type(value_type)>(), nb::arg("u"), circular_call_doc)
-		.def("__call__", get_call<circular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), circular_call_doc);
+		.def("__call__", get_call<circular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), circular_call_doc)
+		.def("__call__", get_call<circular_type(const nb::xarray_view<float>&)>(), nb::arg("u"), circular_call_doc)
+		.def("__call__", get_call<circular_type(const nb::xarray_view<double>&)>(), nb::arg("u"), circular_call_doc)
+		.def("__call__", get_call<circular_type(const nb::xarray_view<long double>&)>(), nb::arg("u"), circular_call_doc)
+		.def("__call__", get_call<circular_type(const nb::xtensor_view<float, 1>&, const nb::xtensor_view<float, 1>&)>(), nb::arg("ux"), nb::arg("uy"), circular_call_doc)
+		.def("__call__", get_call<circular_type(const nb::xtensor_view<double, 1>&, const nb::xtensor_view<double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), circular_call_doc)
+		.def("__call__", get_call<circular_type(const nb::xtensor_view<long double, 1>&, const nb::xtensor_view<long double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), circular_call_doc);
 
 	using annular_type = af::annular<value_type>;
 	nb::class_<af::annular<value_type>>(m, "Annular", annular_doc)
 		.def(nb::init<value_type>(), nb::arg("obscuration"))
 		.def("__call__", get_call<annular_type(value_type)>(), nb::arg("u"), annular_call_doc)
-		.def("__call__", get_call<annular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), annular_call_doc);
+		.def("__call__", get_call<annular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), annular_call_doc)
+		.def("__call__", get_call<annular_type(const nb::xarray_view<float>&)>(), nb::arg("u"), annular_call_doc)
+		.def("__call__", get_call<annular_type(const nb::xarray_view<double>&)>(), nb::arg("u"), annular_call_doc)
+		.def("__call__", get_call<annular_type(const nb::xarray_view<long double>&)>(), nb::arg("u"), annular_call_doc)
+		.def("__call__", get_call<annular_type(const nb::xtensor_view<float, 1>&, const nb::xtensor_view<float, 1>&)>(), nb::arg("ux"), nb::arg("uy"), annular_call_doc)
+		.def("__call__", get_call<annular_type(const nb::xtensor_view<double, 1>&, const nb::xtensor_view<double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), annular_call_doc)
+		.def("__call__", get_call<annular_type(const nb::xtensor_view<long double, 1>&, const nb::xtensor_view<long double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), annular_call_doc);
 
 	using cross_annular_type = af::cross_annular<value_type>;
 	nb::class_<af::cross_annular<value_type>>(m, "CrossAnnular", cross_annular_doc)
 		.def(nb::init<value_type, value_type, value_type>(), nb::arg("ratio"), nb::arg("obscuration_first"), nb::arg("obscuration_second"))
 		.def("__call__", get_call<cross_annular_type(value_type)>(), nb::arg("u"), cross_annular_call_doc)
-		.def("__call__", get_call<cross_annular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), cross_annular_call_doc);
+		.def("__call__", get_call<cross_annular_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), cross_annular_call_doc)
+		.def("__call__", get_call<cross_annular_type(const nb::xarray_view<float>&)>(), nb::arg("u"), cross_annular_call_doc)
+		.def("__call__", get_call<cross_annular_type(const nb::xarray_view<double>&)>(), nb::arg("u"), cross_annular_call_doc)
+		.def("__call__", get_call<cross_annular_type(const nb::xarray_view<long double>&)>(), nb::arg("u"), cross_annular_call_doc)
+		.def("__call__", get_call<cross_annular_type(const nb::xtensor_view<float, 1>&, const nb::xtensor_view<float, 1>&)>(), nb::arg("ux"), nb::arg("uy"), cross_annular_call_doc)
+		.def("__call__", get_call<cross_annular_type(const nb::xtensor_view<double, 1>&, const nb::xtensor_view<double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), cross_annular_call_doc)
+		.def("__call__", get_call<cross_annular_type(const nb::xtensor_view<long double, 1>&, const nb::xtensor_view<long double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), cross_annular_call_doc);
 
 	using point_type = af::point<value_type>;
 	nb::class_<point_type>(m, "Point", point_doc)
 		.def(nb::init<>())
 		.def("__call__", get_call<point_type(value_type)>(), nb::arg("u"), point_call_doc)
-		.def("__call__", get_call<point_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), point_call_doc);
+		.def("__call__", get_call<point_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), point_call_doc)
+		.def("__call__", get_call<point_type(const nb::xarray_view<float>&)>(), nb::arg("u"), point_call_doc)
+		.def("__call__", get_call<point_type(const nb::xarray_view<double>&)>(), nb::arg("u"), point_call_doc)
+		.def("__call__", get_call<point_type(const nb::xarray_view<long double>&)>(), nb::arg("u"), point_call_doc)
+		.def("__call__", get_call<point_type(const nb::xtensor_view<float, 1>&, const nb::xtensor_view<float, 1>&)>(), nb::arg("ux"), nb::arg("uy"), point_call_doc)
+		.def("__call__", get_call<point_type(const nb::xtensor_view<double, 1>&, const nb::xtensor_view<double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), point_call_doc)
+		.def("__call__", get_call<point_type(const nb::xtensor_view<long double, 1>&, const nb::xtensor_view<long double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), point_call_doc);
 
 	using square_type = af::square<value_type>;
 	nb::class_<square_type>(m, "Square", square_doc)
 		.def(nb::init<>())
-		.def("__call__", get_call<square_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), square_call_doc);
+		.def("__call__", get_call<square_type(value_type, value_type)>(), nb::arg("ux"), nb::arg("uy"), square_call_doc)
+		.def("__call__", get_call<square_type(const nb::xtensor_view<float, 1>&, const nb::xtensor_view<float, 1>&)>(), nb::arg("ux"), nb::arg("uy"), square_call_doc)
+		.def("__call__", get_call<square_type(const nb::xtensor_view<double, 1>&, const nb::xtensor_view<double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), square_call_doc)
+		.def("__call__", get_call<square_type(const nb::xtensor_view<long double, 1>&, const nb::xtensor_view<long double, 1>&)>(), nb::arg("ux"), nb::arg("uy"), square_call_doc);
 }

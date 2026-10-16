@@ -2,6 +2,9 @@
 
 from typing import overload
 
+import numpy
+from numpy.typing import NDArray
+
 import pyweif
 
 
@@ -24,11 +27,23 @@ class Mono:
 
     def __init__(self) -> None: ...
 
-    def __call__(self, x: float) -> float:
+    @overload
+    def __call__(self, x: float) -> float: ...
+
+    @overload
+    def __call__(self, x: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, x: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, x: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Call operator for monochromatic spectral filter.
 
-        Evaluates the filter function for a given argument:
+        Evaluates the filter function for a given argument. The evaluation is
+        vectorized: passing an array returns an array of filter values of the same
+        shape.
 
         .. math::
 
@@ -36,34 +51,47 @@ class Mono:
 
         Parameters
         ----------
-        x : float
+        x : float or array_like
             Normalized squared frequency :math:`x = z f^2 = \\frac{u^2}{\\lambda}`.
+            May be a scalar or an array of any shape.
 
         Returns
         -------
-        float
-            Filter value at x.
+        float or ndarray
+            Filter value(s) at x.
 
         See Also
         --------
-        :external+libweif:cpp:func:`weif::sf::mono::operator()` : Base function in C++ library.
+        :external+libweif:cpp:func:`weif::sf::mono::operator()()` : Base function in C++ library.
         """
 
-    def regular(self, x: float) -> float:
+    @overload
+    def regular(self, x: float) -> float: ...
+
+    @overload
+    def regular(self, x: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def regular(self, x: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def regular(self, x: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Evaluates the regularized monochromatic spectral filter.
 
-        Evaluates :math:`x^2 E(x)`.
+        Evaluates :math:`x^2 E(x)`. The evaluation is vectorized: passing an array
+        returns an array of filter values of the same shape.
 
         Parameters
         ----------
-        x : float
+        x : float or array_like
             Normalized squared frequency :math:`x = z f^2 = \\frac{u^2}{\\lambda}`.
+            May be a scalar or an array of any shape.
 
         Returns
         -------
-        float
-            Regularized filter value at x.
+        float or ndarray
+            Regularized filter value(s) at x.
 
         See Also
         --------
@@ -99,11 +127,23 @@ class Gauss:
 
     def __init__(self, fwhm: float) -> None: ...
 
-    def __call__(self, x: float) -> float:
+    @overload
+    def __call__(self, x: float) -> float: ...
+
+    @overload
+    def __call__(self, x: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, x: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, x: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Call operator for Gaussian spectral filter.
 
-        Evaluates the filter function for a given argument:
+        Evaluates the filter function for a given argument. The evaluation is
+        vectorized: passing an array returns an array of filter values of the same
+        shape.
 
         .. math::
 
@@ -111,34 +151,47 @@ class Gauss:
 
         Parameters
         ----------
-        x : float
+        x : float or array_like
             Normalized squared frequency :math:`x = z f^2 = \\frac{u^2}{\\lambda}`.
+            May be a scalar or an array of any shape.
 
         Returns
         -------
-        float
-            Filter value at x.
+        float or ndarray
+            Filter value(s) at x.
 
         See Also
         --------
-        :external+libweif:cpp:func:`weif::sf::gauss::operator()` : Base function in C++ library.
+        :external+libweif:cpp:func:`weif::sf::gauss::operator()()` : Base function in C++ library.
         """
 
-    def regular(self, x: float) -> float:
+    @overload
+    def regular(self, x: float) -> float: ...
+
+    @overload
+    def regular(self, x: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def regular(self, x: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def regular(self, x: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Evaluates the regularized Gaussian spectral filter.
 
-        Evaluates :math:`x^2 E(x)`.
+        Evaluates :math:`x^2 E(x)`. The evaluation is vectorized: passing an array
+        returns an array of filter values of the same shape.
 
         Parameters
         ----------
-        x : float
+        x : float or array_like
             Normalized squared frequency :math:`x = z f^2 = \\frac{u^2}{\\lambda}`.
+            May be a scalar or an array of any shape.
 
         Returns
         -------
-        float
-            Regularized filter value at x.
+        float or ndarray
+            Regularized filter value(s) at x.
 
         See Also
         --------
@@ -192,42 +245,67 @@ class Poly:
     @overload
     def __init__(self, response: pyweif.SpectralResponse, size: int, carrier: float) -> None: ...
 
-    def __call__(self, x: float) -> float:
+    @overload
+    def __call__(self, x: float) -> float: ...
+
+    @overload
+    def __call__(self, x: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def __call__(self, x: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, x: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Call operator for polychromatic spectral filter.
 
-        Evaluates the filter function for a given argument.
+        Evaluates the filter function for a given argument. The evaluation is
+        vectorized: passing an array returns an array of filter values of the same
+        shape.
 
         Parameters
         ----------
-        x : float
+        x : float or array_like
             Normalized squared frequency :math:`x = z f^2 = \\frac{u^2}{\\lambda}`.
+            May be a scalar or an array of any shape.
 
         Returns
         -------
-        float
-            Filter value at x.
+        float or ndarray
+            Filter value(s) at x.
 
         See Also
         --------
-        :external+libweif:cpp:func:`weif::sf::poly::operator()` : Base function in C++ library.
+        :external+libweif:cpp:func:`weif::sf::poly::operator()()` : Base function in C++ library.
         """
 
-    def regular(self, x: float) -> float:
+    @overload
+    def regular(self, x: float) -> float: ...
+
+    @overload
+    def regular(self, x: NDArray[numpy.float32]) -> NDArray[numpy.float32]: ...
+
+    @overload
+    def regular(self, x: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def regular(self, x: NDArray[numpy.float128]) -> NDArray[numpy.float128]:
         """
         Evaluates the regularized polychromatic spectral filter.
 
-        Evaluates :math:`x^2 E(x)`.
+        Evaluates :math:`x^2 E(x)`. The evaluation is vectorized: passing an array
+        returns an array of filter values of the same shape.
 
         Parameters
         ----------
-        x : float
+        x : float or array_like
             Normalized squared frequency :math:`x = z f^2 = \\frac{u^2}{\\lambda}`.
+            May be a scalar or an array of any shape.
 
         Returns
         -------
-        float
-            Regularized filter value at x.
+        float or ndarray
+            Regularized filter value(s) at x.
 
         See Also
         --------

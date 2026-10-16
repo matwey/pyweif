@@ -1,6 +1,9 @@
 from collections.abc import Callable, Iterable
 from typing import overload
 
+import numpy
+from numpy.typing import NDArray
+
 from pyweif import af as af, df as df, sf as sf
 
 
@@ -13,12 +16,15 @@ class SpectralResponse:
     The spectral response is typically used as input for polychromatic
     filter calculations.
 
-    The spectral response is constructed either from a single data file or by
-    stacking (multiplying) several response curves from a sequence of files.
+    The spectral response is constructed either from a single data file, by
+    stacking (multiplying) several response curves from a sequence of files, or
+    from an array of response values on a uniform wavelength grid.
 
     The single-file form loads wavelength and response values from a
     space-separated text file. The iterable form loads each file sequentially
-    and stacks (multiplies) the responses together.
+    and stacks (multiplies) the responses together. The array form constructs
+    the response from a 1-D array of values on a uniform grid specified by
+    ``origin`` and ``delta``.
 
     Parameters
     ----------
@@ -29,6 +35,13 @@ class SpectralResponse:
         Iterable of file paths. Each file must satisfy the format described
         in the Notes section below.
         Used when calling with an iterable of filenames.
+    data : array_like (1-D)
+        Response values on a uniform wavelength grid.
+        Used when calling with a data array.
+    origin : float
+        First wavelength of the uniform grid, in nanometers. Keyword-only.
+    delta : float
+        Wavelength grid spacing, in nanometers. Keyword-only.
 
     Notes
     -----
@@ -59,6 +72,9 @@ class SpectralResponse:
 
     @overload
     def __init__(self, iter: Iterable[str]) -> None: ...
+
+    @overload
+    def __init__(self, data: NDArray[numpy.float64], *, origin: float, delta: float) -> None: ...
 
     def normalize(self) -> SpectralResponse:
         """
@@ -164,6 +180,32 @@ class SpectralResponse:
         :external+libweif:cpp:func:`weif::spectral_response::effective_lambda` : Base function in C++ library.
         """
 
+    def grid(self) -> NDArray[numpy.float64]:
+        """
+        Returns the wavelength grid.
+
+        Returns
+        -------
+        ndarray
+            One-dimensional array of wavelength values (nanometers).
+        """
+
+    def data(self) -> NDArray[numpy.float64]:
+        """
+        Returns the spectral response curve data.
+
+        The data is a 1-D array of response values corresponding to the wavelength grid.
+
+        Returns
+        -------
+        ndarray
+            One-dimensional array of response values (same length as the wavelength grid).
+
+        See Also
+        --------
+        :external+libweif:cpp:func:`weif::spectral_response::data` : Base method in C++ library.
+        """
+
 class WeightFunction:
     """
     Scintillation weight function for axially symmetric power spectra.
@@ -203,29 +245,52 @@ class WeightFunction:
     --------
     :external+libweif:cpp:class:`weif::weight_function` : Base class in C++ library.
     :external+libweif:cpp:func:`weif::sf::poly::equiv_lambda` : Compute equivalent wavelength for polychromatic filters.
-    :external+libweif:cpp:member:`weif::math::Kolmogorov_Cn2_scale` : Kolmogorov turbulence scaling.
+    :external+libweif:cpp:member:`Kolmogorov_Cn2_scale` : Kolmogorov turbulence scaling.
     :external+libweif:cpp:func:`weif::weight_function::weight_function` : Base constructor in C++ library.
     """
 
     def __init__(self, spectral_filter: Callable[[float], float], wavelength: float, aperture_filter: Callable[[float], float], aperture_scale: float, size: int) -> None: ...
 
-    def __call__(self, altitude: float) -> float:
+    @overload
+    def __call__(self, altitude: float) -> float: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float32]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float128]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float32]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float128]) -> NDArray[numpy.float64]:
         """
         Evaluates the scintillation weight function at the specified altitude.
 
+        The evaluation is vectorized: passing an array of altitudes returns an array
+        of weight values of the same shape.
+
         Parameters
         ----------
-        altitude : float
-            Atmospheric altitude in kilometers.
+        altitude : float or array_like
+            Atmospheric altitude in kilometers. May be a scalar or an array of any
+            shape.
 
         Returns
         -------
-        float
-            Weight value representing thin layer contribution to scintillation.
+        float or ndarray
+            Weight value(s) representing thin layer contribution to scintillation.
 
         See Also
         --------
-        :external+libweif:cpp:func:`weif::weight_function::operator()` : Base function in C++ library.
+        :external+libweif:cpp:func:`weif::weight_function::operator()()` : Base function in C++ library.
         """
 
 class WeightFunction2d:
@@ -267,27 +332,50 @@ class WeightFunction2d:
     --------
     :external+libweif:cpp:class:`weif::weight_function_2d` : Base class in C++ library.
     :external+libweif:cpp:func:`weif::sf::poly::equiv_lambda` : Compute equivalent wavelength for polychromatic filters.
-    :external+libweif:cpp:member:`weif::math::Kolmogorov_Cn2_scale` : Kolmogorov turbulence scaling.
+    :external+libweif:cpp:member:`Kolmogorov_Cn2_scale` : Kolmogorov turbulence scaling.
     :external+libweif:cpp:func:`weif::weight_function_2d::weight_function_2d` : Base constructor in C++ library.
     """
 
     def __init__(self, spectral_filter: Callable[[float], float], wavelength: float, aperture_filter: Callable[[float, float], float], aperture_scale: float, size: int) -> None: ...
 
-    def __call__(self, altitude: float) -> float:
+    @overload
+    def __call__(self, altitude: float) -> float: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float32]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float128]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float32]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, altitude: NDArray[numpy.float128]) -> NDArray[numpy.float64]:
         """
         Evaluates the scintillation weight function at the specified altitude.
 
+        The evaluation is vectorized: passing an array of altitudes returns an array
+        of weight values of the same shape.
+
         Parameters
         ----------
-        altitude : float
-            Atmospheric altitude in kilometers.
+        altitude : float or array_like
+            Atmospheric altitude in kilometers. May be a scalar or an array of any
+            shape.
 
         Returns
         -------
-        float
-            Weight value representing thin layer contribution to scintillation.
+        float or ndarray
+            Weight value(s) representing thin layer contribution to scintillation.
 
         See Also
         --------
-        :external+libweif:cpp:func:`weif::weight_function_2d::operator()` : Base function in C++ library.
+        :external+libweif:cpp:func:`weif::weight_function_2d::operator()()` : Base function in C++ library.
         """

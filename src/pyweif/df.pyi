@@ -1,6 +1,10 @@
 """Digital filter submodule"""
 
 from collections.abc import Callable, Sequence
+from typing import overload
+
+import numpy
+from numpy.typing import NDArray
 
 
 class DigitalFilter2d:
@@ -23,6 +27,10 @@ class DigitalFilter2d:
     shape : tuple[int, int]
         Filter dimensions (Nx, Ny). The impulse response will be computed
         on a grid of this size.
+    impulse_response : array_like (2-D)
+        2-D array containing the filter impulse response values.
+        The shape of the array determines the filter dimensions (Nx, Ny).
+        Used when constructing directly from an impulse response tensor.
 
     See Also
     --------
@@ -30,7 +38,17 @@ class DigitalFilter2d:
     :external+libweif:cpp:func:`weif::digital_filter_2d::digital_filter_2d` : Base constructor in C++ library.
     """
 
+    @overload
     def __init__(self, fun: Callable[[float, float], float], shape: Sequence[int]) -> None: ...
+
+    @overload
+    def __init__(self, impulse_response: NDArray[numpy.float32]) -> None: ...
+
+    @overload
+    def __init__(self, impulse_response: NDArray[numpy.float64]) -> None: ...
+
+    @overload
+    def __init__(self, impulse_response: NDArray[numpy.float128]) -> None: ...
 
     def mix(self) -> DigitalFilter2d:
         """
@@ -67,26 +85,49 @@ class DigitalFilter2d:
         :external+libweif:cpp:func:`weif::digital_filter_2d::mixed` : Base method in C++ library.
         """
 
-    def __call__(self, ux: float, uy: float) -> float:
+    @overload
+    def __call__(self, ux: float, uy: float) -> float: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float32], uy: NDArray[numpy.float32]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float64], uy: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float128], uy: NDArray[numpy.float128]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float32], uy: NDArray[numpy.float32]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float64], uy: NDArray[numpy.float64]) -> NDArray[numpy.float64]: ...
+
+    @overload
+    def __call__(self, ux: NDArray[numpy.float128], uy: NDArray[numpy.float128]) -> NDArray[numpy.float64]:
         """
         Evaluates the digital filter at the specified frequency coordinates.
 
         Computes the filter response for the given dimensionless frequency components
-        using the discrete Fourier transform of the impulse response.
+        using the discrete Fourier transform of the impulse response. The evaluation
+        is vectorized: passing arrays returns an array of filter responses.
 
         Parameters
         ----------
-        ux : float
+        ux : float or array_like
             Dimensionless frequency component in the x-direction.
-        uy : float
+            Used when calling with two arguments (scalar or array).
+        uy : float or array_like
             Dimensionless frequency component in the y-direction.
+            Used when calling with two arguments (scalar or array).
 
         Returns
         -------
-        float
-            Filter response value.
+        float or ndarray
+            Filter response value(s). For 1-D arrays ux of shape (N,) and uy of
+            shape (M,), the result is a 2-D array of shape (N, M).
 
         See Also
         --------
-        :external+libweif:cpp:func:`weif::digital_filter_2d::operator()` : Base function in C++ library.
+        :external+libweif:cpp:func:`weif::digital_filter_2d::operator()()` : Base function in C++ library.
         """
