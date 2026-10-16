@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Build package on ${{ matrix.os }}
+    name: Build package
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
@@ -112,8 +112,28 @@ jobs:
         if: matrix.os == 'macos-15-intel'
         run: echo "MACOSX_DEPLOYMENT_TARGET=10.13" >> "$GITHUB_ENV"
 
+      - name: Set macOS vcpkg toolchain
+        if: runner.os == 'macOS'
+        run: echo "CMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" >> "$GITHUB_ENV"
+
+      - name: Restore vcpkg cache
+        id: restore-vcpkg-cache
+        if: runner.os == 'macOS'
+        uses: actions/cache/restore@v6
+        with:
+          path: ~/.cache/vcpkg/archives
+          key: vcpkg-wheels-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('vcpkg.json') }}
+          restore-keys: vcpkg-wheels-${{ runner.os }}-${{ runner.arch }}-
+
       - name: Build wheels
         uses: pypa/cibuildwheel@v4.2.1
+
+      - name: Save vcpkg cache
+        if: runner.os == 'macOS' && steps.restore-vcpkg-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: ~/.cache/vcpkg/archives
+          key: vcpkg-wheels-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('vcpkg.json') }}
 
       - uses: actions/upload-artifact@v7
         with:
