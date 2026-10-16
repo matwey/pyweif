@@ -75,5 +75,3 @@ environment = { CMAKE_TOOLCHAIN_FILE = "/opt/vcpkg/scripts/buildsystems/vcpkg.cm
 
 [tool.cibuildwheel.macos]
 archs = ["auto"]
-before-all = "git clone --depth 1 https://github.com/microsoft/vcpkg /tmp/vcpkg && /tmp/vcpkg/bootstrap-vcpkg.sh -disableMetrics"
-environment = { CMAKE_TOOLCHAIN_FILE = "/tmp/vcpkg/scripts/buildsystems/vcpkg.cmake" }
