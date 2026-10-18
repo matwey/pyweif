@@ -1,6 +1,7 @@
 {
   "dependencies": [
     "boost-compat",
-    "libweif"
+    "libweif",
+    "pkgconf"
   ]
 }
