@@ -1,6 +1,6 @@
 {
   "name": "libweif",
-  "version-string": "0.2.6",
+  "version-string": "0.2.7",
   "description": "Optical turbulence weighting function package",
   "homepage": "https://github.com/matwey/libweif",
   "dependencies": [
