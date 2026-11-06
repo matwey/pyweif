@@ -126,7 +126,7 @@ jobs:
           restore-keys: vcpkg-wheels-${{ runner.os }}-${{ runner.arch }}-
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v4.2.1
+        uses: pypa/cibuildwheel@v4.3.5
 
       - name: Save vcpkg cache
         if: runner.os == 'macOS' && steps.restore-vcpkg-cache.outputs.cache-hit != 'true'
