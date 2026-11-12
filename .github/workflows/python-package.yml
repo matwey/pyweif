@@ -108,9 +108,10 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Set Intel macOS deployment target
-        if: matrix.os == 'macos-15-intel'
-        run: echo "MACOSX_DEPLOYMENT_TARGET=10.13" >> "$GITHUB_ENV"
+      # std::format with floating-point arguments requires macOS 13.3+
+      - name: Set macOS deployment target
+        if: runner.os == 'macOS'
+        run: echo "MACOSX_DEPLOYMENT_TARGET=13.3" >> "$GITHUB_ENV"
 
       - name: Set macOS vcpkg toolchain
         if: runner.os == 'macOS'
