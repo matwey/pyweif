@@ -1,5 +1,5 @@
 [build-system]
-requires = ["scikit-build-core>=0.3.3", "nanobind"]
+requires = ["scikit-build-core>=0.3.3", "nanobind @ git+https://github.com/matwey/nanobind.git@xtensor"]
 build-backend = "scikit_build_core.build"
 
 [project]
@@ -9,7 +9,7 @@ description = "Python bindings for libweif"
 authors = [
     { name = "Matwey V. Kornilov", email = "matwey.kornilov@gmail.com" },
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 4 - Beta",
     "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
