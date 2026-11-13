@@ -38,7 +38,7 @@ wheel.py-api = "cp312"
 
 [tool.tox]
 requires = ["tox>=4.19"]
-env_list = ["3.14", "3.13", "3.12", "3.11", "3.10", "3.9"]
+env_list = ["3.14", "3.13", "3.12", "3.11", "3.10"]
 
 [tool.tox.env_run_base]
 description = "Run test under {base_python}"
