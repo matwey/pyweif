@@ -3,8 +3,6 @@ project(${SKBUILD_PROJECT_NAME} VERSION ${SKBUILD_PROJECT_VERSION} LANGUAGES CXX
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -ffast-math -fno-finite-math-only")
-
 find_package(Python REQUIRED COMPONENTS Interpreter Development.Module Development.SABIModule)
 execute_process(
   COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
@@ -24,6 +22,14 @@ nanobind_add_module(pyweif
 	src/spectral_response.cpp
 	src/pyweif.cpp
 	src/weight_function.cpp)
+if(MSVC)
+	target_compile_options(pyweif PUBLIC "/Wall;/fp:precise")
+else()
+	target_compile_options(pyweif
+		PUBLIC "-Wall;-ffast-math;-fno-finite-math-only"
+		PUBLIC "$<$<CONFIG:Release>:-O3>"
+		PUBLIC "$<$<CONFIG:RelWithDebInfo>:-O3>")
+endif()
 target_link_libraries(pyweif PRIVATE PkgConfig::WEIF)
 target_compile_definitions(pyweif PRIVATE VERSION_INFO="${PROJECT_VERSION}")
 set_property(TARGET pyweif PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
